@@ -1,0 +1,22 @@
+{
+  "timestamp": "2026-02-23T17:10:55.229469",
+  "n_models": 3,
+  "n_samples": 1731,
+  "results": [
+    {
+      "model_name": "intfloat/e5-large-v2",
+      "short_name": "e5-large-v2",
+      "error": "Target modules {'all-linear'} not found in the base model. Please check the target modules and try again."
+    },
+    {
+      "model_name": "BAAI/bge-base-en-v1.5",
+      "short_name": "bge-base-en",
+      "error": "Target modules {'all-linear'} not found in the base model. Please check the target modules and try again."
+    },
+    {
+      "model_name": "BAAI/bge-large-en-v1.5",
+      "short_name": "bge-large-en",
+      "error": "Target modules {'all-linear'} not found in the base model. Please check the target modules and try again."
+    }
+  ]
+}

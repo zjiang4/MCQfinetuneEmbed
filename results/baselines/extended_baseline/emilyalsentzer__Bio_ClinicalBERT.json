@@ -1,0 +1,9 @@
+{
+  "model": "emilyalsentzer/Bio_ClinicalBERT",
+  "status": "success",
+  "Pearson_mean": 0.14791906797515764,
+  "Pearson_std": 0.01760627597986406,
+  "MAE_mean": 0.055691051549848845,
+  "R2_mean": 0.01774145134699532,
+  "category": "Medical Models (Newly Working)"
+}

@@ -1,0 +1,9 @@
+{
+  "model": "cambridgeltl/SapBERT-from-PubMedBERT-fulltext",
+  "status": "success",
+  "Pearson_mean": 0.11642308725013373,
+  "Pearson_std": 0.02780105852944317,
+  "MAE_mean": 0.05633638002227781,
+  "R2_mean": 0.007758012845307682,
+  "category": "Medical Models (Previously Tested)"
+}

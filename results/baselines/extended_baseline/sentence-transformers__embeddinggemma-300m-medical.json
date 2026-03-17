@@ -1,0 +1,9 @@
+{
+  "model": "sentence-transformers/embeddinggemma-300m-medical",
+  "status": "success",
+  "Pearson_mean": 0.24718484177196984,
+  "Pearson_std": 0.029291464628506257,
+  "MAE_mean": 0.05436004670378578,
+  "R2_mean": 0.056751552170807254,
+  "category": "Medical Models (Newly Working)"
+}

@@ -1,0 +1,58 @@
+{
+  "model_name": "ncbi/MedCPT-Query-Encoder",
+  "short_name": "medcpt-query",
+  "description": "MedCPT Query Encoder (Pearson 0.1257)",
+  "config": {
+    "lr": 2e-05,
+    "batch_size": 16,
+    "dim": 768
+  },
+  "duration_seconds": 5593.768752,
+  "zero_shot": {
+    "MAE_mean": 0.044729927895091524,
+    "RMSE_mean": 0.05673472112668304,
+    "R2_mean": 0.3130117863488497,
+    "Pearson_mean": 0.5605085122269415,
+    "Spearman_mean": 0.5550332014578354,
+    "MAE_std": 0.0004159275688126087,
+    "RMSE_std": 0.000704091477106437,
+    "R2_std": 0.011080044032349117,
+    "Pearson_std": 0.01019040161800004,
+    "Spearman_std": 0.00928420145584088,
+    "n_samples": 23999,
+    "n_folds": 5
+  },
+  "finetuned": {
+    "MAE_mean": 0.044729927895091524,
+    "RMSE_mean": 0.05673472112668304,
+    "R2_mean": 0.3130117863488497,
+    "Pearson_mean": 0.5605085122269415,
+    "Spearman_mean": 0.5550332014578354,
+    "MAE_std": 0.0004159275688126087,
+    "RMSE_std": 0.000704091477106437,
+    "R2_std": 0.011080044032349117,
+    "Pearson_std": 0.01019040161800004,
+    "Spearman_std": 0.00928420145584088,
+    "n_samples": 23999,
+    "n_folds": 5
+  },
+  "improvement": {
+    "pearson": 0.0,
+    "percent": 0.0
+  },
+  "training_history": {
+    "train_loss": [
+      0.18439735914270083,
+      0.18439735968907675,
+      0.1843973581989606,
+      0.18439736053347588
+    ],
+    "val_loss": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "timestamp": "2026-02-28T06:20:51.352508"
+}

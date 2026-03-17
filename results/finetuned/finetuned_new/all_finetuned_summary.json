@@ -1,0 +1,302 @@
+{
+  "timestamp": "2026-02-28T09:21:04.108959",
+  "n_models": 6,
+  "n_samples": 6000,
+  "results": [
+    {
+      "model_name": "FremyCompany/BioLORD-2023",
+      "short_name": "biolord-2023",
+      "description": "BioLORD 2023 - Best zero-shot (Pearson 0.2234)",
+      "config": {
+        "lr": 2e-05,
+        "batch_size": 16,
+        "dim": 768
+      },
+      "duration_seconds": 3724.317647,
+      "zero_shot": {
+        "MAE_mean": 0.0445020471861247,
+        "RMSE_mean": 0.056704060335078334,
+        "R2_mean": 0.3137899259212829,
+        "Pearson_mean": 0.5604911570633504,
+        "Spearman_mean": 0.5559316250206517,
+        "MAE_std": 0.0004530123604072522,
+        "RMSE_std": 0.0006227030278401112,
+        "R2_std": 0.006487399170240843,
+        "Pearson_std": 0.005562447795349179,
+        "Spearman_std": 0.0079026258629917,
+        "n_samples": 23999,
+        "n_folds": 5
+      },
+      "finetuned": {
+        "MAE_mean": 0.0445020471861247,
+        "RMSE_mean": 0.056704060335078334,
+        "R2_mean": 0.3137899259212829,
+        "Pearson_mean": 0.5604911570633504,
+        "Spearman_mean": 0.5559316250206517,
+        "MAE_std": 0.0004530123604072522,
+        "RMSE_std": 0.0006227030278401112,
+        "R2_std": 0.006487399170240843,
+        "Pearson_std": 0.005562447795349179,
+        "Spearman_std": 0.0079026258629917,
+        "n_samples": 23999,
+        "n_folds": 5
+      },
+      "improvement": {
+        "pearson": 0.0,
+        "percent": 0.0
+      },
+      "training_history": {
+        "train_loss": [
+          0.1947241933643818,
+          0.19472419475515684,
+          0.19472419346372286,
+          0.1947241933643818
+        ],
+        "val_loss": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "timestamp": "2026-02-28T03:10:58.117386"
+    },
+    {
+      "model_name": "abhinand/MedEmbed-small-v0.1",
+      "short_name": "medembed-small",
+      "description": "MedEmbed Small v0.1 (Pearson 0.1620)",
+      "config": {
+        "lr": 3e-05,
+        "batch_size": 32,
+        "dim": 384
+      },
+      "duration_seconds": 5799.459716,
+      "zero_shot": {
+        "MAE_mean": 0.04564089322565738,
+        "RMSE_mean": 0.05789463937667105,
+        "R2_mean": 0.2846387245395437,
+        "Pearson_mean": 0.5338901097629615,
+        "Spearman_mean": 0.5268180077300282,
+        "MAE_std": 0.00047811471061065514,
+        "RMSE_std": 0.0005952739592106251,
+        "R2_std": 0.008820396220848969,
+        "Pearson_std": 0.007795865835755107,
+        "Spearman_std": 0.010653604261867409,
+        "n_samples": 23999,
+        "n_folds": 5
+      },
+      "finetuned": {
+        "MAE_mean": 0.04564089322565738,
+        "RMSE_mean": 0.05789463937667105,
+        "R2_mean": 0.2846387245395437,
+        "Pearson_mean": 0.5338901097629615,
+        "Spearman_mean": 0.5268180077300282,
+        "MAE_std": 0.00047811471061065514,
+        "RMSE_std": 0.0005952739592106251,
+        "R2_std": 0.008820396220848969,
+        "Pearson_std": 0.007795865835755107,
+        "Spearman_std": 0.010653604261867409,
+        "n_samples": 23999,
+        "n_folds": 5
+      },
+      "improvement": {
+        "pearson": 0.0,
+        "percent": 0.0
+      },
+      "training_history": {
+        "train_loss": [
+          0.18569968938827514,
+          0.18569968938827514,
+          0.18569969127575556,
+          0.18569969028234481
+        ],
+        "val_loss": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "timestamp": "2026-02-28T04:47:37.580284"
+    },
+    {
+      "model_name": "ncbi/MedCPT-Query-Encoder",
+      "short_name": "medcpt-query",
+      "description": "MedCPT Query Encoder (Pearson 0.1257)",
+      "config": {
+        "lr": 2e-05,
+        "batch_size": 16,
+        "dim": 768
+      },
+      "duration_seconds": 5593.768752,
+      "zero_shot": {
+        "MAE_mean": 0.044729927895091524,
+        "RMSE_mean": 0.05673472112668304,
+        "R2_mean": 0.3130117863488497,
+        "Pearson_mean": 0.5605085122269415,
+        "Spearman_mean": 0.5550332014578354,
+        "MAE_std": 0.0004159275688126087,
+        "RMSE_std": 0.000704091477106437,
+        "R2_std": 0.011080044032349117,
+        "Pearson_std": 0.01019040161800004,
+        "Spearman_std": 0.00928420145584088,
+        "n_samples": 23999,
+        "n_folds": 5
+      },
+      "finetuned": {
+        "MAE_mean": 0.044729927895091524,
+        "RMSE_mean": 0.05673472112668304,
+        "R2_mean": 0.3130117863488497,
+        "Pearson_mean": 0.5605085122269415,
+        "Spearman_mean": 0.5550332014578354,
+        "MAE_std": 0.0004159275688126087,
+        "RMSE_std": 0.000704091477106437,
+        "R2_std": 0.011080044032349117,
+        "Pearson_std": 0.01019040161800004,
+        "Spearman_std": 0.00928420145584088,
+        "n_samples": 23999,
+        "n_folds": 5
+      },
+      "improvement": {
+        "pearson": 0.0,
+        "percent": 0.0
+      },
+      "training_history": {
+        "train_loss": [
+          0.18439735914270083,
+          0.18439735968907675,
+          0.1843973581989606,
+          0.18439736053347588
+        ],
+        "val_loss": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "timestamp": "2026-02-28T06:20:51.352508"
+    },
+    {
+      "model_name": "cambridgeltl/SapBERT-from-PubMedBERT-fulltext",
+      "short_name": "sapbert-pubmed",
+      "description": "SapBERT from PubMedBERT (Pearson 0.1164)",
+      "config": {
+        "lr": 2e-05,
+        "batch_size": 16,
+        "dim": 768
+      },
+      "duration_seconds": 5437.101328,
+      "zero_shot": {
+        "MAE_mean": 0.046660676859244535,
+        "RMSE_mean": 0.05914391596549397,
+        "R2_mean": 0.25337733014752745,
+        "Pearson_mean": 0.5045091500576879,
+        "Spearman_mean": 0.500494855677391,
+        "MAE_std": 0.00020737031665430276,
+        "RMSE_std": 0.00037230058820909455,
+        "R2_std": 0.009705378299024894,
+        "Pearson_std": 0.008280350714789757,
+        "Spearman_std": 0.008173366425545113,
+        "n_samples": 23999,
+        "n_folds": 5
+      },
+      "finetuned": {
+        "MAE_mean": 0.046660676859244535,
+        "RMSE_mean": 0.05914391596549397,
+        "R2_mean": 0.25337733014752745,
+        "Pearson_mean": 0.5045091500576879,
+        "Spearman_mean": 0.500494855677391,
+        "MAE_std": 0.00020737031665430276,
+        "RMSE_std": 0.00037230058820909455,
+        "R2_std": 0.009705378299024894,
+        "Pearson_std": 0.008280350714789757,
+        "Spearman_std": 0.008173366425545113,
+        "n_samples": 23999,
+        "n_folds": 5
+      },
+      "improvement": {
+        "pearson": 0.0,
+        "percent": 0.0
+      },
+      "training_history": {
+        "train_loss": [
+          0.18218918631474176,
+          0.1821891873081525,
+          0.18218918586770694,
+          0.18218918720881144
+        ],
+        "val_loss": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "timestamp": "2026-02-28T07:51:28.474379"
+    },
+    {
+      "model_name": "EMBO/soda-vec-negative-sampling",
+      "short_name": "soda-vec",
+      "error": "Target modules {'key', 'dense', 'query', 'value'} not found in the base model. Please check the target modules and try again."
+    },
+    {
+      "model_name": "ncbi/MedCPT-Article-Encoder",
+      "short_name": "medcpt-article",
+      "description": "MedCPT Article Encoder (Pearson 0.0959)",
+      "config": {
+        "lr": 2e-05,
+        "batch_size": 16,
+        "dim": 768
+      },
+      "duration_seconds": 5375.102191,
+      "zero_shot": {
+        "MAE_mean": 0.046047391378951065,
+        "RMSE_mean": 0.05806089185350927,
+        "R2_mean": 0.28049499575733383,
+        "Pearson_mean": 0.5361465720042611,
+        "Spearman_mean": 0.5311099797867492,
+        "MAE_std": 0.0002459730937871008,
+        "RMSE_std": 0.0004634125533292645,
+        "R2_std": 0.008744375854905203,
+        "Pearson_std": 0.010696563033533278,
+        "Spearman_std": 0.013864594460863886,
+        "n_samples": 23999,
+        "n_folds": 5
+      },
+      "finetuned": {
+        "MAE_mean": 0.046047391378951065,
+        "RMSE_mean": 0.05806089185350927,
+        "R2_mean": 0.28049499575733383,
+        "Pearson_mean": 0.5361465720042611,
+        "Spearman_mean": 0.5311099797867492,
+        "MAE_std": 0.0002459730937871008,
+        "RMSE_std": 0.0004634125533292645,
+        "R2_std": 0.008744375854905203,
+        "Pearson_std": 0.010696563033533278,
+        "Spearman_std": 0.013864594460863886,
+        "n_samples": 23999,
+        "n_folds": 5
+      },
+      "improvement": {
+        "pearson": 0.0,
+        "percent": 0.0
+      },
+      "training_history": {
+        "train_loss": [
+          0.1821052548289299,
+          0.1821052550772826,
+          0.18210525453090667,
+          0.18210525343815487
+        ],
+        "val_loss": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "timestamp": "2026-02-28T09:21:04.107061"
+    }
+  ]
+}
