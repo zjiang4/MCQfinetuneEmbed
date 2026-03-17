@@ -113,22 +113,6 @@ MCQfinetuneEmbed/
 - MedCPT
 - BioLinkBERT
 
-## 📈 Results Summary
-
-| Metric | Baseline | Fine-tuned | Improvement |
-|--------|----------|------------|-------------|
-| Pearson Correlation | 0.439 | 0.653 | +48.6% |
-| 95% CI | - | [0.626, 0.680] | - |
-| Cohen's d | - | 1.19 | Large effect |
-
-### Cross-Disciplinary Performance
-
-All 8 clinical disciplines achieved r ≥ 0.60, demonstrating strong generalizability.
-
-### Difficulty-Level Analysis
-
-Best performance in mid-difficulty range (MAE = 0.028), where distractor quality is most critical.
-
 ## 🛠️ Technical Approach
 
 ### Distractor-Targeted Fine-Tuning
