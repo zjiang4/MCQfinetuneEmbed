@@ -18,9 +18,9 @@ $^3$[Email]
 
 **Background**: The effectiveness of distractors in multiple-choice questions (MCQs) is critical to assessment validity, yet current evaluation methods are reactive and resource-intensive. We investigated whether domain-specific fine-tuning of pre-trained embedding models can predict distractor effectiveness from textual features alone, enabling pre-deployment quality screening.
 
-**Methods**: Using 6,000 medical MCQs across eight clinical disciplines (16,800 distractor samples with observed selection rates), we compared ten pre-trained embedding models—five general-purpose and five medical domain-specific—under baseline and fine-tuned conditions, systematically evaluating loss functions, training strategies, and learning rates.
+**Methods**: Using 6,000 medical MCQs across eight clinical disciplines (24,000 distractor samples across training, validation, and test splits), we compared ten pre-trained embedding models—five general-purpose and five medical domain-specific—under baseline and fine-tuned conditions, systematically evaluating loss functions, training strategies, and learning rates.
 
-**Results**: Fine-tuning substantially improved distractor effectiveness prediction. The optimal configuration achieved Pearson r = 0.653 (95% CI: 0.636–0.669), a 48.6% improvement over baseline (r = 0.439; p < 0.001; Cohen's d = 1.19). Medical domain-specific embeddings showed dual advantages: stronger zero-shot performance (BioLORD-2023 and MedCPT-Query both r = 0.560, +11.1% vs. best general baseline) and successful fine-tuning (MedCPT-Article r = 0.637 with 67% fewer parameters than the best general model). Full fine-tuning dramatically outperformed frozen encoders (+93.8%). All loss functions performed robustly (r = 0.629–0.653). Optimal learning rates scaled inversely with model size.
+**Results**: Fine-tuning substantially improved distractor effectiveness prediction. The optimal configuration achieved Pearson r = 0.653 (95% CI: 0.636–0.669), a 48.7% improvement over baseline (r = 0.439; p < 0.001; Cohen's d = 1.19). Medical domain-specific embeddings showed dual advantages: stronger zero-shot performance (BioLORD-2023 and MedCPT-Query both r = 0.560, +11.1% vs. best general baseline) and successful fine-tuning (MedCPT-Article r = 0.637 with 67% fewer parameters than the best general model). Full fine-tuning dramatically outperformed frozen encoders (+93.8%). All loss functions performed robustly (r = 0.629–0.653). Optimal learning rates scaled inversely with model size.
 
 **Conclusions**: Domain-specific fine-tuning substantially improves automated prediction of distractor effectiveness. Medical embeddings offer strong zero-shot performance and parameter-efficient fine-tuning, enabling tiered deployment strategies from rapid zero-shot screening (r ≈ 0.56) to high-accuracy fine-tuned prediction (r ≈ 0.65).
 
@@ -167,7 +167,7 @@ All experiments employed consistent optimisation settings:
 - **Random seeds**: Fixed at 42 for reproducibility across PyTorch, NumPy, and Python
 - **Early stopping**: Monitor validation Pearson correlation with patience = 3 epochs
 
-**Computational Environment**: Experiments were conducted on a high-performance computing system equipped with four NVIDIA Tesla V100 GPUs (32GB VRAM each), 125GB system memory, and 64 CPU cores. Training times ranged from approximately 20-30 minutes per full fine-tuning run for large models (335M parameters) to 5 minutes for frozen encoder approaches. Total computational time for all 49 fine-tuning experiments was approximately 18 hours.
+**Computational Environment**: Experiments were conducted on a high-performance computing system equipped with four NVIDIA Tesla V100 GPUs (32GB VRAM each), 125GB system memory, and 64 CPU cores. Training times ranged from approximately 20-30 minutes per full fine-tuning run for large models (335M parameters) to 5 minutes for frozen encoder approaches. Total computational time for all 48 fine-tuning experiments was approximately 18 hours.
 
 ### 2.6 Evaluation Metrics
 
@@ -227,8 +227,8 @@ We evaluated ten pre-trained embedding models—five general-purpose and five me
 **Performance Spectrum**: Across all baselines, correlations ranged from 0.417 to 0.560, demonstrating that pre-trained embeddings capture partial predictive signal, but substantial unexplained variance remains—motivating our fine-tuning experiments. A naive baseline that always predicts the mean selection rate (0.136) achieves MAE = 0.068 and r = 0, confirming that all embedding-based approaches provide meaningful predictive signal above chance.
 
 **Statistical Comparison** (Medical vs. General):
-- Mean medical baseline: r = 0.539 (SD = 0.018)
-- Mean general baseline: r = 0.477 (SD = 0.027)
+- Mean medical baseline: r = 0.539 (SD = 0.023)
+- Mean general baseline: r = 0.477 (SD = 0.028)
 - Difference: +0.062 (95% CI: +0.037 to +0.087), p = 0.003 (significant)
 - Medical models significantly outperform general models at zero-shot inference
 
@@ -246,7 +246,7 @@ Table 2 presents results after fine-tuning with standardised hyperparameters.
 | all-mpnet-base-v2 | 0.483 | 0.621 | +0.138 | +28.6% | 0.040 | 0.052 |
 | all-MiniLM-L6-v2 | 0.458 | 0.612 | +0.154 | +33.6% | 0.042 | 0.054 |
 
-All fine-tuned models significantly outperformed baselines (p < 0.001 for all comparisons). Improvements ranged from 21.6% to 33.6%, demonstrating universal benefit from domain adaptation.
+All fine-tuned models significantly outperformed baselines (p < 0.001 for all comparisons). Improvements ranged from 21.6% to 33.6%, demonstrating universal benefit from domain adaptation. Note: BGE-large baseline r = 0.514 in Table 2 differs from the CLS-token baseline r = 0.439 in Table 1 due to different train/test splits (Table 2 uses a stratified split consistent with Table 3, while Table 1 uses a different random seed). The primary results and ablation analyses consistently use the Table 3 comprehensive pipeline (baseline r = 0.439, best fine-tuned r = 0.653).
 
 ### 3.3 Phase 3: Comprehensive Configuration Analysis
 
@@ -376,7 +376,7 @@ Models perform best for moderate selection rates (MAE = 0.028) with systematic b
 
 **Figure 1** presents a scatter plot of predicted versus observed selection rates for the best model (BGE-large, MSE, Full, LR=1×10⁻⁵), and **Figure 2** shows the residual distribution across the selection rate spectrum.
 
-**Figure 1: Predicted vs. Observed Distractor Selection Rate.** Scatter plot showing the relationship between model predictions and observed selection rates for the best-performing configuration (BGE-large, MSE, Full, LR=1×10⁻⁵; Pearson r = 0.653, n = 3,615 distractors). Density contours and a linear regression fit (slope = 0.65) are overlaid. The dashed diagonal represents perfect prediction. Summary statistics: MAE = 0.041, RMSE = 0.054, Spearman ρ = 0.654.
+**Figure 1: Predicted vs. Observed Distractor Selection Rate.** Scatter plot showing the relationship between model predictions and observed selection rates for the best-performing configuration (BGE-large, MSE, Full, LR=1×10⁻⁵; Pearson r = 0.653, n = 3,615 distractors). Density contours and a linear regression fit are overlaid. The dashed diagonal represents perfect prediction. Summary statistics from the test set: MAE = 0.042, RMSE = 0.052, Spearman ρ = 0.638.
 
 **Figure 2: Residual Analysis.** (a) Residuals (observed minus predicted) versus predicted values, with a LOESS smooth showing systematic patterns. Positive residuals indicate underprediction; negative residuals indicate overprediction. (b) Boxplots of residuals by observed selection rate quintile, demonstrating systematic overestimation at low selection rates (Q1) and underestimation at high rates (Q5).
 
@@ -407,8 +407,8 @@ To examine whether domain-specific pre-training provides differential advantages
 | Cardiology | 0.572 | 0.568 | 0.498 | +14.9% |
 | Infectious Diseases | 0.581 | 0.577 | 0.521 | +11.5% |
 | Neurology | 0.563 | 0.559 | 0.503 | +11.9% |
-| Respiratory | 0.569 | 0.565 | 0.511 | +11.3% |
-| Nephrology | 0.548 | 0.542 | 0.489 | +11.9% |
+| Respiratory | 0.569 | 0.565 | 0.511 | +11.4% |
+| Nephrology | 0.548 | 0.542 | 0.489 | +12.1% |
 | Rheumatology | 0.547 | 0.541 | 0.492 | +11.2% |
 | Endocrinology | 0.561 | 0.558 | 0.512 | +9.6% |
 | Haematology | 0.559 | 0.553 | 0.507 | +10.3% |
@@ -422,7 +422,7 @@ To examine whether domain-specific pre-training provides differential advantages
 
 3. **Discipline Difficulty Spectrum**: Performance varied across specialties for all models. Infectious Diseases achieved highest correlations (0.581 for BioLORD), while Nephrology and Rheumatology showed lowest (0.547-0.548), suggesting differential prediction difficulty across clinical domains.
 
-4. **Model Stability**: BioLORD-2023 showed lowest variance across disciplines (SD = 0.012), indicating more stable performance, while MedCPT-Query had slightly higher variance (SD = 0.013).
+4. **Model Stability**: BioLORD-2023 showed lowest variance across disciplines (SD = 0.012), indicating more stable performance, while MedCPT-Query had slightly higher variance (SD = 0.012).
 
 **Implications**: The consistent advantage across all disciplines suggests medical embeddings capture generalizable biomedical semantic relationships rather than specialty-specific patterns. However, the variation in absolute performance indicates discipline-specific challenges in distractor effectiveness prediction, potentially reflecting differences in clinical reasoning complexity.
 
@@ -436,10 +436,10 @@ Building on the baseline performance of medical embeddings (Section 3.1), we suc
 |-------|-----------|----------------------|------------------------|---------------|---------------------|-----|-----|---------------|
 | **ncbi/MedCPT-Article** | 109M | 0.445 (0.038) | **0.637 (0.027)** | **+0.192** | **+43.2%** | 0.040 | 0.404 | 41 min |
 | FremyCompany/BioLORD-2023 | 109M | 0.485 (0.020) | 0.617 (0.027) | +0.132 | +27.3% | 0.042 | 0.376 | 46 min |
-| ncbi/MedCPT-Query | 109M | 0.490 (0.022) | 0.614 (0.026) | +0.123 | +25.1% | 0.042 | 0.373 | 40 min |
+| ncbi/MedCPT-Query | 109M | 0.490 (0.022) | 0.614 (0.026) | +0.123 | +25.3% | 0.042 | 0.373 | 40 min |
 | abhinand/MedEmbed-small | 33M | 0.485 (0.022) | 0.595 (0.017) | +0.110 | +22.7% | 0.042 | 0.347 | 20 min |
 | cambridgeltl/SapBERT-PubMed | 109M | 0.417 (0.022) | 0.547 (0.011) | +0.130 | +31.1% | 0.045 | 0.291 | 30 min |
-| **Mean** | | **0.464 (0.032)** | **0.602 (0.033)** | **+0.137** | **+29.9%** | **0.042** | **0.358** | **35 min** |
+| **Mean** | | **0.464 (0.032)** | **0.602 (0.034)** | **+0.137** | **+29.9%** | **0.042** | **0.358** | **35 min** |
 
 **Note**: All improvements are statistically significant (p < 0.001, Fisher z-test). Fine-tuning configuration: CosineSimilarityLoss, learning rate 2×10⁻⁵ (3×10⁻⁵ for MedEmbed-small), batch size 16 (32 for MedEmbed-small), early stopping with patience=3. Standard deviations shown in parentheses from 5-fold cross-validation on test set. Baseline values are measured within the same CosineSimilarityLoss pipeline to ensure comparability with fine-tuned results; these differ from the multi-feature CLS-token baselines reported in Table 1 due to differences in embedding extraction method and train/test splits.
 
@@ -455,7 +455,7 @@ Building on the baseline performance of medical embeddings (Section 3.1), we suc
 
 | Category | Best Model | Baseline | Fine-tuned | Improvement | Parameters | R² | Training Time |
 |----------|-----------|----------|------------|-------------|------------|-----|---------------|
-| **General** | BGE-large | 0.439 | **0.653** | +48.6% | 335M | 0.419 | ~30 min |
+| **General** | BGE-large | 0.439 | **0.653** | +48.7% | 335M | 0.425 | ~30 min |
 | **Medical** | MedCPT-Article | 0.445 | **0.637** | +43.2% | 109M | 0.404 | ~41 min |
 | **Difference** | | **+1.4%** | **-2.4%** | -5.4 pp | **-67%** | -0.015 | +37% |
 
@@ -508,7 +508,7 @@ To assess whether medical and general embeddings capture complementary predictiv
 
 **1. Large, Significant Improvements from Fine-tuning**
 
-Fine-tuning improved Pearson correlation from 0.439 to 0.653 (+48.6%), with large effect size (Cohen's d = 1.19). This magnitude exceeds typical fine-tuning gains in other medical NLP tasks, suggesting distractor plausibility prediction particularly benefits from domain adaptation. Pre-trained embeddings capture general semantic similarity, but effective distractors require a nuanced balance—semantic proximity to the correct answer combined with conceptual distinction—that benefits from task-specific learning. We note that our model predicts observed selection rates (a behavioural metric of distractor attractiveness) from textual features; this represents a text-based approximation of distractor effectiveness rather than a complete model of the cognitive processes underlying examinee behaviour (see Limitations, Section 4.6).
+Fine-tuning improved Pearson correlation from 0.439 to 0.653 (+48.7%), with large effect size (Cohen's d = 1.19). This magnitude exceeds typical fine-tuning gains in other medical NLP tasks, suggesting distractor plausibility prediction particularly benefits from domain adaptation. Pre-trained embeddings capture general semantic similarity, but effective distractors require a nuanced balance—semantic proximity to the correct answer combined with conceptual distinction—that benefits from task-specific learning. We note that our model predicts observed selection rates (a behavioural metric of distractor attractiveness) from textual features; this represents a text-based approximation of distractor effectiveness rather than a complete model of the cognitive processes underlying examinee behaviour (see Limitations, Section 4.6).
 
 **2. Critical Importance of Full Model Adaptation**
 
@@ -526,7 +526,7 @@ Modest performance differences across loss functions (r = 0.629-0.653) suggest f
 
 **5. Efficiency-Performance Trade-offs**
 
-The computational cost of fine-tuning must be weighed against the practical benefits. Full fine-tuning of BGE-large requires approximately 30 minutes on a single V100 GPU and 3.2 GB VRAM—substantially less than the estimated 15 minutes of expert time required to manually review a single MCQ item. For an item bank of 6,000 questions (24,000 options), manual review would require approximately 6,000 expert-hours, whereas automated screening with our fine-tuned model requires approximately 20 hours of GPU time. Even the most expensive configuration (full fine-tuning) is therefore approximately 300× more time-efficient than manual expert review. The tiered deployment framework (Section 4.5) further optimises this trade-off by matching computational investment to performance requirements.
+The computational cost of fine-tuning must be weighed against the practical benefits. Full fine-tuning of BGE-large requires approximately 30 minutes on a single V100 GPU and 3.2 GB VRAM—substantially less than the estimated 15 minutes of expert time required to manually review a single MCQ item (approximately 5 minutes per option across 4 options). For an item bank of 6,000 questions (approximately 24,000 options), manual review would require approximately 2,000 expert-hours, whereas automated screening with our fine-tuned model requires approximately 20 hours of GPU time. The tiered deployment framework (Section 4.5) further optimises this trade-off by matching computational investment to performance requirements.
 
 ### 4.2 Medical Domain Embeddings: Combining Pre-training with Task-Specific Fine-tuning
 
@@ -646,7 +646,7 @@ Promising avenues include: (1) cross-encoder architectures that jointly process 
 This investigation demonstrates that domain-specific adaptation substantially improves automated prediction of distractor effectiveness in medical MCQs:
 
 **General-Purpose Models**:
-1. Fine-tuning yields large, statistically significant improvements (r: 0.44 → 0.65, +48.6%, Cohen's d = 1.19)
+1. Fine-tuning yields large, statistically significant improvements (r: 0.439 → 0.653, +48.7%, Cohen's d = 1.19)
 2. Full model adaptation is essential (+93.8% over frozen encoders)
 3. Optimal learning rates depend on model size (inverse scaling)
 4. Loss function choice is secondary (all achieve r = 0.63-0.65)

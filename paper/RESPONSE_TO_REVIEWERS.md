@@ -76,7 +76,7 @@ We have also updated the GitHub repository with the complete preprocessing pipel
 **Response.** We fully agree that visualisations provide richer information than quintile summaries. We have added two new figures.
 
 **Changes:**
-- **Figure 1 (new):** Scatter plot of predicted versus observed selection rates for the best model (BGE-large, MSE, Full, LR=1×10⁻⁵). Includes density contours, identity line, linear regression fit, and summary statistics (MAE = 0.041, RMSE = 0.054, Spearman ρ = 0.654; n = 3,615 distractors).
+- **Figure 1 (new):** Scatter plot of predicted versus observed selection rates for the best model (BGE-large, MSE, Full, LR=1×10⁻⁵). Includes density contours, identity line, linear regression fit, and summary statistics (MAE = 0.042, RMSE = 0.052, Spearman ρ = 0.638; n = 3,615 distractors).
 - **Figure 2 (new):** Two-panel residual analysis: (a) residuals versus predicted values with a LOESS smooth showing systematic patterns, and (b) boxplots of residuals by observed selection rate quintile, demonstrating systematic overestimation at low rates and underestimation at high rates.
 - **Section 3.5:** Updated to reference both figures (line 379).
 
@@ -203,7 +203,7 @@ We thank Reviewer 3 for the detailed and practical suggestions, several of which
 **Response.** We have added a comprehensive analysis.
 
 **Changes:**
-- **Section 4.1 (new subsection):** "Efficiency–Performance Trade-offs" — quantifies that fine-tuning BGE-large requires ~30 min on a single V100 GPU and 3.2 GB VRAM, whereas manual review requires ~15 min per item (~6,000 expert-hours for 6,000 questions). Automated screening is ~300× more time-efficient (line 527).
+- **Section 4.1 (new subsection):** "Efficiency–Performance Trade-offs" — quantifies that fine-tuning BGE-large requires ~30 min on a single V100 GPU and 3.2 GB VRAM, whereas manual review requires ~5 min per option (~2,000 expert-hours for 6,000 questions). Automated screening is ~100× more time-efficient (line 527).
 - **Section 4.5 (Practical Implications, new section):** Added a tiered deployment framework with four configurations:
   - **High-accuracy**: Fine-tuned BGE-large (r = 0.653, 335M params)
   - **Parameter-efficient medical**: Fine-tuned MedCPT-Article (r = 0.637, 109M params)
