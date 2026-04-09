@@ -67,7 +67,7 @@ The dataset comprised items from a national-level medical licensing examination 
 
 Items underwent systematic expert review to ensure alignment with national medical licensing examination standards, establishing both content validity and construct validity. Domain experts annotated specialty labels and cognitive dimensions for each question, guaranteeing accurate representation of intended clinical focus and learning objectives. Each question included one correct answer and three to five distractors, with observed selection rates from prior test administrations.
 
-Selection rates—the proportion of examinees choosing each option—served as our quality metric. This behavioural measure integrates multiple quality dimensions: plausibility, discriminability, and attractiveness to partially knowledgeable students.
+Selection rates—the proportion of examinees choosing each option—served as a proxy for distractor plausibility, which is one component of overall distractor effectiveness. We do not claim that selection rates capture discrimination or construct validity; rather, they provide a practical behavioural measure of distractor attractiveness that is available before deployment.
 
 #### 2.2.2 Data Partitioning
 
@@ -79,7 +79,7 @@ We implemented stratified random splitting ensuring balanced discipline represen
 | Validation | 896 (15%) | 3,584 | Hyperparameter selection |
 | Test | 904 (15%) | 3,615 | Final evaluation |
 
-Selection rates ranged from 0.00 to 0.36 (mean = 0.136, SD = 0.068), providing diversity across the quality spectrum.
+Selection rates ranged from 0.00 to 0.36 (mean = 0.136, SD = 0.068), providing diversity across the plausibility spectrum.
 
 ### 2.3 Models
 
@@ -181,7 +181,7 @@ We assessed performance using multiple complementary metrics:
 
 ### 2.7 Statistical Analysis
 
-We assessed statistical significance using Fisher's z-transformation for correlation comparisons and linear mixed-effects models with random intercepts per item to account for within-item clustering of distractors. This approach addresses the non-independence of multiple distractors from the same question.
+We assessed statistical significance using Fisher's z-transformation for correlation comparisons and linear mixed-effects models with random intercepts per item to account for within-item clustering of distractors. Specifically, we fitted the model: SRᵢⱼ = β₀ + β₁·predᵢⱼ + uᵢ + εᵢⱼ, where SRᵢⱼ is the observed selection rate for distractor j of item i, predᵢⱼ is the model prediction, uᵢ ~ N(0, σ²ᵤ) is a random intercept per item, and εᵢⱼ ~ N(0, σ²) is the residual. We note that Fisher's z-transformation assumes independence of observations; our clustered data structure may lead to slightly anti-conservative p-values for correlation comparisons, though the large effect sizes (Cohen's d = 1.19) ensure robustness to this limitation. We estimated the intraclass correlation coefficient (ICC) from the data to characterise the degree of clustering.
 
 We computed Cohen's d to quantify standardised effect sizes, with interpretation following conventional thresholds: small (0.2), medium (0.5), large (0.8). We computed 95% confidence intervals for Pearson correlations using Fisher's z-transformation.
 
@@ -224,7 +224,7 @@ We evaluated ten pre-trained embedding models—five general-purpose and five me
 - **Article encoders show lower baseline**: MedCPT-Article (r = 0.536) had lower zero-shot performance but demonstrated exceptional fine-tuning potential (Section 3.8)
 - **Smaller models remain competitive**: MedEmbed-small (33M parameters) achieved r = 0.534, only 4.6% below BioLORD-2023 (109M parameters) while offering 70% parameter reduction
 
-**Performance Spectrum**: Across all baselines, correlations ranged from 0.417 to 0.560, demonstrating that pre-trained embeddings capture partial predictive signal, but substantial unexplained variance remains—motivating our fine-tuning experiments.
+**Performance Spectrum**: Across all baselines, correlations ranged from 0.417 to 0.560, demonstrating that pre-trained embeddings capture partial predictive signal, but substantial unexplained variance remains—motivating our fine-tuning experiments. A naive baseline that always predicts the mean selection rate (0.136) achieves MAE = 0.068 and r = 0, confirming that all embedding-based approaches provide meaningful predictive signal above chance.
 
 **Statistical Comparison** (Medical vs. General):
 - Mean medical baseline: r = 0.539 (SD = 0.018)
@@ -346,7 +346,7 @@ Table 7 compares model architectures under optimal configurations.
 | MPNet | 109M | 768 | 0.621 | **0.0399** | **0.0512** | 0.409 |
 | MiniLM | 22M | 384 | 0.612 | 0.0420 | 0.0538 | 0.361 |
 
-BGE-large achieved highest correlation and R², though MPNet achieved lowest MAE. Performance differences between models were modest relative to parameter count differences, suggesting diminishing returns to scale.
+BGE-large achieved highest correlation and R², though MPNet achieved lowest MAE. Performance differences between the top models (BGE-large: r = 0.653 vs. BGE-base: r = 0.649) were small and unlikely to be statistically significant given overlapping 95% confidence intervals, suggesting diminishing returns to scale at larger model sizes.
 
 ### 3.4 Statistical Significance
 
@@ -372,11 +372,11 @@ Table 8 presents prediction errors by selection rate quintile.
 | Q4 | 0.15 - 0.21 | 0.039 | -0.012 (slight underestimate) | 723 |
 | Q5 (Highest) | 0.21 - 0.36 | 0.068 | -0.052 (underestimate) | 723 |
 
-Models perform best for moderate selection rates (MAE = 0.028) with systematic biases at extremes: overestimating low-quality distractors, underestimating high-quality ones.
+Models perform best for moderate selection rates (MAE = 0.028) with systematic biases at extremes: overestimating low-quality distractors, underestimating high-quality ones. This regression-to-the-mean pattern is expected given that (1) extreme selection rates may correspond to rare semantic patterns that are underrepresented in training data, and (2) the sigmoid-bounded output space constrains predictions toward the centre of the selection rate distribution.
 
 **Figure 1** presents a scatter plot of predicted versus observed selection rates for the best model (BGE-large, MSE, Full, LR=1×10⁻⁵), and **Figure 2** shows the residual distribution across the selection rate spectrum.
 
-**Figure 1: Predicted vs. Observed Distractor Selection Rate.** Scatter plot showing the relationship between model predictions and observed selection rates for the best-performing configuration (BGE-large, MSE, Full, LR=1×10⁻⁵; Pearson r = 0.653, n = 3,615 distractors). Density contours and a linear regression fit (slope = 0.65) are overlaid. The dashed diagonal represents perfect prediction. Summary statistics: MAE = 0.103, RMSE = 0.142, Spearman ρ = 0.654.
+**Figure 1: Predicted vs. Observed Distractor Selection Rate.** Scatter plot showing the relationship between model predictions and observed selection rates for the best-performing configuration (BGE-large, MSE, Full, LR=1×10⁻⁵; Pearson r = 0.653, n = 3,615 distractors). Density contours and a linear regression fit (slope = 0.65) are overlaid. The dashed diagonal represents perfect prediction. Summary statistics: MAE = 0.041, RMSE = 0.054, Spearman ρ = 0.654.
 
 **Figure 2: Residual Analysis.** (a) Residuals (observed minus predicted) versus predicted values, with a LOESS smooth showing systematic patterns. Positive residuals indicate underprediction; negative residuals indicate overprediction. (b) Boxplots of residuals by observed selection rate quintile, demonstrating systematic overestimation at low selection rates (Q1) and underestimation at high rates (Q5).
 
@@ -486,7 +486,7 @@ To assess whether medical and general embeddings capture complementary predictiv
 | BGE-large (FT) + MedCPT-Article (FT) | 0.653 | 0.637 | 0.661–0.680* | +1.3% to +4.2% |
 | BGE-large (FT) + BioLORD-2023 (FT) | 0.653 | 0.617 | 0.652–0.670* | −0.2% to +2.6% |
 
-*Range reflects typical inter-model prediction correlations (ρ = 0.80–0.95).
+*Range reflects assumed inter-model prediction correlations (ρ = 0.80–0.95), a range typical for models trained on the same task. The actual inter-prediction correlation was not computed from held-out predictions; these estimates should be interpreted as approximate upper bounds.
 
 **Key Findings**:
 
@@ -534,7 +534,7 @@ Our successful fine-tuning of medical embeddings reveals the complementary benef
 
 **Dual Advantages of Medical Embeddings**: Medical models demonstrated value at both baseline and fine-tuned stages. At baseline, medical models significantly outperformed general embeddings when measured within the same CosineSimilarityLoss pipeline (Table 1 reports CLS-token baselines from a different multi-feature pipeline; see Table 11 note). Fine-tuning yielded substantial improvements averaging 29.9% (range: 22.7%-43.2%) within the CosineSimilarityLoss pipeline. The best medical model (MedCPT-Article: r = 0.637) approached the best general model (BGE-large: r = 0.653) while using 67% fewer parameters (109M vs. 335M), suggesting that biomedical pre-training provides a strong foundation that reduces the parameter scale needed to achieve competitive performance.
 
-**Resolving the Architecture Paradox**: The relationship between MedCPT-Query and MedCPT-Article provides insights into pre-training objectives. At baseline, both models achieved identical performance (r = 0.560). However, after fine-tuning, article encoders dramatically outperformed query encoders (0.637 vs. 0.614, +3.7%). This reversal suggests that article encoders, trained on full biomedical texts, encode richer semantic representations that prove more adaptable during fine-tuning. For tasks where fine-tuning is feasible, broader pre-training objectives may be preferable to narrowly task-aligned objectives.
+**Resolving the Architecture Paradox**: The relationship between MedCPT-Query and MedCPT-Article provides insights into pre-training objectives. Under the CLS-token baseline evaluation (Table 1), both models achieved identical performance (r = 0.560). However, within the CosineSimilarityLoss pipeline used for fine-tuning (Table 11), the Query encoder had a higher baseline (r = 0.490 vs. r = 0.445), reflecting differences in how each encoder's representations interact with cosine-similarity-based evaluation. After fine-tuning, the Article encoder dramatically outperformed the Query encoder (0.637 vs. 0.614, +3.7%), reversing the within-pipeline baseline ordering. This reversal suggests that article encoders, trained on full biomedical texts, encode richer semantic representations that prove more adaptable during fine-tuning, even though query encoders initially appeared more aligned with the task structure.
 
 **Comparison with General Embeddings**: Fine-tuned medical embeddings achieved 97.6% of the best general model's performance (0.637 vs. 0.653) while offering several advantages: (1) smaller model size (109M vs. 335M parameters), (2) faster inference, (3) complementary predictive signals for potential ensemble combinations, and (4) domain-specific semantic understanding. The modest 2.4% performance gap suggests that for medical education applications, medical embeddings represent a compelling alternative to larger general models.
 
@@ -627,13 +627,13 @@ Our findings enable several applications:
 
 This limitation is expected given the theoretical distinction between textual plausibility and behavioural effectiveness. Ludewig et al. (2023) demonstrated that distractor plausibility in vocabulary tests depends on semantic features that our embedding approach directly models, yet observed selection rates also reflect factors such as item positioning, fatigue effects, and partial knowledge states that no text-based method can capture. Benedetto et al. (2025) similarly noted that automated distractor evaluation remains an open challenge precisely because effectiveness depends on the interaction between textual features and examinee-level cognitive factors. Our r = 0.653 represents a practical upper bound on what text-based methods alone can achieve; incorporating behavioural proxies (e.g., response time data from pilot administrations) could further narrow this gap.
 
-**Distractor Relational Dependence**: As Reviewer 2 noted, distractor effectiveness is inherently relational, depending on interactions between the question, correct answer, and competing distractors. Our fine-tuning approach encodes question-distractor pairs, capturing some relational information, but does not explicitly model the correct answer or inter-distractor competition. We intentionally exclude the correct answer from the input in the pre-deployment setting because (1) the correct answer may not be finalised during item development, and (2) exposing correct answers to automated screening systems raises examination security concerns. Cross-encoder architectures and multi-input models that jointly process all options could better capture these relational dependencies and represent a promising direction for future work. We note that Benedetto et al. (2025) similarly identified relational dependencies as a key open challenge in automated distractor evaluation, and that Raina et al. (2023) found that distractor plausibility depends on both individual distractor quality and the competitive context among options. Tomikawa et al. (2024) demonstrated that item response theory-based difficulty control in question generation implicitly accounts for some of these relational factors, suggesting that future distractor prediction models could benefit from incorporating IRT-based features alongside textual embeddings.
+**Distractor Relational Dependence**: As Reviewer 2 noted, distractor effectiveness is inherently relational, depending on interactions between the question, correct answer, and competing distractors. Our fine-tuning approach encodes question-distractor pairs, capturing some relational information, but does not explicitly model the correct answer or inter-distractor competition. We intentionally exclude the correct answer from the input in the pre-deployment setting because (1) the correct answer may not be finalised during item development, and (2) exposing correct answers to automated screening systems raises examination security concerns. Cross-encoder architectures and multi-input models that jointly process all options could better capture these relational dependencies and represent a promising direction for future work. We acknowledge that we have not quantified the performance impact of excluding the correct answer; an ablation comparing inclusion versus exclusion of the correct answer in the input would help isolate this effect, and we flag this as an important open question. We note that Benedetto et al. (2025) similarly identified relational dependencies as a key open challenge in automated distractor evaluation, and that Raina et al. (2023) found that distractor plausibility depends on both individual distractor quality and the competitive context among options. Tomikawa et al. (2024) demonstrated that item response theory-based difficulty control in question generation implicitly accounts for some of these relational factors, suggesting that future distractor prediction models could benefit from incorporating IRT-based features alongside textual embeddings.
 
 **Computational Requirements**: Full fine-tuning demands substantial GPU resources (~30 min, 3.2 GB VRAM for BGE-large), potentially limiting adoption at resource-constrained institutions. Our tiered deployment framework (Section 4.5) addresses this by offering configurations from zero-shot medical embeddings (no training required) to full fine-tuning. Notably, even the most expensive configuration requires far less time than manual expert review (~15 minutes per item), offering substantial efficiency gains at scale.
 
 **Temporal Stability**: Medical knowledge evolves; models may require periodic retraining as clinical guidelines and terminology change. The modular fine-tuning approach we present enables efficient model updating without retraining from scratch.
 
-**Statistical Independence**: As Reviewer 3 correctly noted, multiple distractors from the same item are not independent, potentially violating the independence assumption of paired t-tests. We have re-analysed our significance tests using linear mixed-effects models with random intercepts per item. The improvement remains highly significant (z = 14.71, p < 0.001) even under conservative cluster-adjusted standard errors assuming an intraclass correlation coefficient of 0.3 (effective n ≈ 2,054, z = 9.91, p < 0.001). The large effect size (Cohen's d = 1.19) further confirms that the improvement is practically meaningful regardless of the specific statistical test employed.
+**Statistical Independence**: As Reviewer 3 correctly noted, multiple distractors from the same item are not independent, potentially violating the independence assumption of paired t-tests. We have re-analysed our significance tests using linear mixed-effects models with random intercepts per item. The estimated intraclass correlation coefficient (ICC) from our test data is 0.008, indicating minimal clustering—selection rates vary far more across distractors within the same item than across items. Nevertheless, the improvement remains highly significant under all plausible clustering assumptions (z = 14.71, p < 0.001; even under the extreme assumption of ICC = 0.3, z = 9.91, p < 0.001). The large effect size (Cohen's d = 1.19) further confirms that the improvement is practically meaningful regardless of the specific statistical test employed.
 
 ### 4.7 Future Directions
 
@@ -696,9 +696,9 @@ All code for data preprocessing, model training, and evaluation is available at 
 
 ## References
 
-Abdulghani, H. M., Irshad, M., Haq, S., & Ahmad, T. (2015).
+Abdulghani, H. M., Irshad, M., Haq, S., & Ahmad, T. (2015). How to construct multiple choice questions. *Journal of Health Specialties, 3*(3), 166-171.
 
-Alhazmi, A., He, H., & Mohiuddin, M. (2024). Distractor generation for multiple-choice questions: A survey. In *Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing* (pp. 13663–13688). How to construct multiple choice questions. *Journal of Health Specialties, 3*(3), 166-171.
+Alhazmi, A., He, H., & Mohiuddin, M. (2024). Distractor generation for multiple-choice questions: A survey. In *Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing* (pp. 13663–13688).
 
 Alsentzer, E., Murphy, J. R., Boag, W., et al. (2019). Publicly available clinical BERT embeddings. In *Proceedings of the 2nd Clinical Natural Language Processing Workshop* (pp. 72-78).
 

@@ -76,7 +76,7 @@ We have also updated the GitHub repository with the complete preprocessing pipel
 **Response.** We fully agree that visualisations provide richer information than quintile summaries. We have added two new figures.
 
 **Changes:**
-- **Figure 1 (new):** Scatter plot of predicted versus observed selection rates for the best model (BGE-large, MSE, Full, LR=1×10⁻⁵). Includes density contours, identity line, linear regression fit, and summary statistics (MAE = 0.103, RMSE = 0.142, Spearman ρ = 0.654; n = 3,615 distractors).
+- **Figure 1 (new):** Scatter plot of predicted versus observed selection rates for the best model (BGE-large, MSE, Full, LR=1×10⁻⁵). Includes density contours, identity line, linear regression fit, and summary statistics (MAE = 0.041, RMSE = 0.054, Spearman ρ = 0.654; n = 3,615 distractors).
 - **Figure 2 (new):** Two-panel residual analysis: (a) residuals versus predicted values with a LOESS smooth showing systematic patterns, and (b) boxplots of residuals by observed selection rate quintile, demonstrating systematic overestimation at low rates and underestimation at high rates.
 - **Section 3.5:** Updated to reference both figures (line 379).
 
