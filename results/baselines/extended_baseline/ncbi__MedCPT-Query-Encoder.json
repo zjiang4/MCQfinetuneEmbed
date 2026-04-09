@@ -1,9 +1,0 @@
-{
-  "model": "ncbi/MedCPT-Query-Encoder",
-  "status": "success",
-  "Pearson_mean": 0.1257340040377922,
-  "Pearson_std": 0.03532980362210914,
-  "MAE_mean": 0.05617534074430479,
-  "R2_mean": 0.012725436723939576,
-  "category": "Medical Models (Previously Tested)"
-}

@@ -1,9 +1,0 @@
-{
-  "model": "EMBO/soda-vec-negative-sampling",
-  "status": "success",
-  "Pearson_mean": 0.10169802833415827,
-  "Pearson_std": 0.025644985040223757,
-  "MAE_mean": 0.05659717808793689,
-  "R2_mean": 0.005679500322044983,
-  "category": "Medical Models (Previously Tested)"
-}

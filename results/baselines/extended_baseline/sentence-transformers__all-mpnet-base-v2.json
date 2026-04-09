@@ -1,6 +1,0 @@
-{
-  "model": "sentence-transformers/all-mpnet-base-v2",
-  "status": "failed",
-  "error": "Repo id must be in the form 'repo_name' or 'namespace/repo_name': '/home/admin01/.cache/huggingface/hub/models--sentence-transformers--all-mpnet-base-v2/snapshots/9a3d5d55a1a4b94f1b6b80f08d8f60a3e2b20e1'. Use `repo_type` argument if needed.",
-  "category": "Original Models"
-}

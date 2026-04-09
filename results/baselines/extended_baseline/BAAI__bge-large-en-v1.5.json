@@ -1,9 +1,0 @@
-{
-  "model": "BAAI/bge-large-en-v1.5",
-  "status": "success",
-  "Pearson_mean": 0.1318358693162963,
-  "Pearson_std": 0.04202035030924657,
-  "MAE_mean": 0.05619241516891852,
-  "R2_mean": 0.012079162499177887,
-  "category": "Original Models"
-}

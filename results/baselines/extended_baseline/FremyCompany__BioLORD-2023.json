@@ -1,9 +1,0 @@
-{
-  "model": "FremyCompany/BioLORD-2023",
-  "status": "success",
-  "Pearson_mean": 0.22344643920807888,
-  "Pearson_std": 0.02561986339877122,
-  "MAE_mean": 0.05470029967446215,
-  "R2_mean": 0.046535434900124927,
-  "category": "Medical Models (Previously Tested)"
-}

@@ -1,9 +1,0 @@
-{
-  "model": "abhinand/MedEmbed-small-v0.1",
-  "status": "success",
-  "Pearson_mean": 0.16197865580491919,
-  "Pearson_std": 0.03513826085513937,
-  "MAE_mean": 0.05558179212638781,
-  "R2_mean": 0.02342383521250928,
-  "category": "Medical Models (Previously Tested)"
-}
