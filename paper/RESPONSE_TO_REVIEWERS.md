@@ -76,7 +76,7 @@ We have also updated the GitHub repository with the complete preprocessing pipel
 **Response.** We fully agree that visualisations provide richer information than quintile summaries. We have added two new figures.
 
 **Changes:**
-- **Figure 1 (new):** Scatter plot of predicted versus observed selection rates for the best model (BGE-large, MSE, Full, LR=1×10⁻⁵). Includes density contours, identity line, linear regression fit, and summary statistics (MAE = 0.103, RMSE = 0.142, Spearman ρ = 0.654; n = 4,519 distractors).
+- **Figure 1 (new):** Scatter plot of predicted versus observed selection rates for the best model (BGE-large, MSE, Full, LR=1×10⁻⁵). Includes density contours, identity line, linear regression fit, and summary statistics (MAE = 0.103, RMSE = 0.142, Spearman ρ = 0.654; n = 3,615 distractors).
 - **Figure 2 (new):** Two-panel residual analysis: (a) residuals versus predicted values with a LOESS smooth showing systematic patterns, and (b) boxplots of residuals by observed selection rate quintile, demonstrating systematic overestimation at low rates and underestimation at high rates.
 - **Section 3.5:** Updated to reference both figures (line 379).
 
@@ -95,7 +95,7 @@ We thank Reviewer 2 for the constructive and strategically valuable feedback, wh
 **Changes:**
 - **Section 4.4 (new):** Added "Positioning as a Text-Based Approximation," which explicitly states: "We position our approach as a text-based approximation of distractor plausibility, acknowledging that effectiveness is a behavioural signal influenced by cognitive processes beyond textual semantics" (line 545).
 - **Section 4.6 (Limitations, new paragraph):** "Text-Based Approximation of a Behavioural Construct" — "The achieved correlations (r = 0.653) indicate that textual features capture substantial behavioural variance, yet the residual unexplained variance (R² ≈ 0.43) likely reflects additional cognitive and contextual factors" (line 628).
-- **Section 4.2 (Discussion):** Added explicit comparison with prior work on neural item difficulty prediction (Benedetto et al., 2017; Rogoz & Ionescu, 2024; Li et al., 2025), positioning our approach within the broader landscape.
+- **Section 4.2 (Discussion):** Added explicit comparison with prior work on neural item difficulty prediction (Benedetto et al., 2023; Rogoz & Ionescu, 2024; Skidmore et al., 2025; Raina et al., 2023), positioning our approach within the broader landscape.
 
 ### Comment 2: Relational nature of distractor effectiveness
 
@@ -148,8 +148,8 @@ We thank Reviewer 3 for the detailed and practical suggestions, several of which
 **Response.** We have substantially expanded both the Introduction and Discussion with explicit comparisons.
 
 **Changes:**
-- **Introduction (new paragraph):** Added comparison with four categories of prior work: (a) LLM-based distractor generation (Feng et al., 2024; Bitew et al., 2025) — generates new distractors but does not evaluate existing ones; (b) neural item difficulty prediction (Rogoz & Ionescu, 2024; Li et al., 2025) — operates at the item level, not the option level; (c) traditional psychometric methods (Gierl et al., 2017; Gierl & Phocksook, 2022) — rigorous but require post-hoc data; (d) our approach: "distractor-targeted" because it explicitly optimises for selection rates rather than general semantic similarity (line 41).
-- **Section 4.3 (new):** Added "Comparison with Prior Work" with a structured comparison table covering task, input, output, methodology, and key differences relative to Benedetto et al. (2017), Feng et al. (2024), Bitew et al. (2025), Rogoz & Ionescu (2024), and Li et al. (2025).
+- **Introduction (new paragraph):** Added comparison with four categories of prior work: (a) LLM-based distractor generation (Feng et al., 2024; Bitew et al., 2025) — generates new distractors but does not evaluate existing ones; (b) neural item difficulty prediction (Rogoz & Ionescu, 2024; Skidmore et al., 2025) — operates at the item level, not the option level; (c) automated distractor evaluation (Raina et al., 2023; Benedetto et al., 2025) — emerging but lacks regression-based approaches; (d) traditional psychometric methods (Gierl et al., 2017; Gierl & Phocksook, 2022) — rigorous but require post-hoc data; (e) our approach: "distractor-targeted" because it explicitly optimises for selection rates rather than general semantic similarity (line 41).
+- **Section 4.3 (new):** Added "Comparison with Prior Work" with a structured comparison table covering task, input, output, methodology, and key differences relative to Benedetto et al. (2025), Feng et al. (2024), Bitew et al. (2025), Rogoz & Ionescu (2024), and Raina et al. (2023).
 
 ### Comment 2: Single-institution dataset
 
@@ -159,7 +159,7 @@ We thank Reviewer 3 for the detailed and practical suggestions, several of which
 
 **Changes:**
 - **Section 2.2.1 (Dataset):** Revised to: "The dataset comprised items from a national-level medical licensing examination administered across multiple testing centres" (line 66). Also added: "Items underwent systematic expert review to ensure alignment with national medical licensing examination standards" (line 68).
-- **Section 4.6 (Limitations):** Revised the dataset limitation paragraph to: "Questions were drawn from a national-level medical licensing assessment spanning eight clinical disciplines, administered across multiple institutions and testing cycles. This national-level provenance provides broader generalisability than single-institution datasets. Our eight-discipline analysis (Table 10) demonstrates consistent model performance across specialties (r ≥ 0.50 for all discipline-model combinations), suggesting that our findings are not artefacts of a particular institutional context. However, we acknowledge that all items share a common national examination framework, and cross-jurisdictional validation is needed to establish broader external generalisability" (line 626).
+- **Section 4.6 (Limitations):** Revised the dataset limitation paragraph to: "Questions were drawn from a national-level medical licensing assessment spanning eight clinical disciplines, administered across multiple institutions and testing cycles. This national-level provenance provides broader generalisability than single-institution datasets. Our eight-discipline analysis (Table 10) demonstrates consistent model performance across specialties (r ≥ 0.49 for all discipline-model combinations, with all medical model combinations achieving r ≥ 0.54), suggesting that our findings are not artefacts of a particular institutional context. However, we acknowledge that all items share a common national examination framework, and cross-jurisdictional validation is needed to establish broader external generalisability" (line 626).
 
 ### Comment 3: Limited evaluation metrics
 

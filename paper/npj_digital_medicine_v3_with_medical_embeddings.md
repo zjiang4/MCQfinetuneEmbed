@@ -38,7 +38,7 @@ Transformer-based language models have catalyzed advances in medical natural lan
 
 Transfer learning through fine-tuning offers a principled approach to domain adaptation (Howard & Ruder, 2018). While fine-tuning has improved performance across medical NLP tasks (Lee et al., 2020; Alsentzer et al., 2019), its application to predicting continuous behavioural metrics in educational assessment remains underexplored.
 
-Recent advances in MCQ analysis have focused on two complementary directions. First, LLM-based distractor generation methods (Feng et al., 2024; Bitew et al., 2025) have demonstrated that large language models can produce plausible distractors, but these approaches do not evaluate the quality of existing distractors. Second, neural item difficulty prediction (Rogoz & Ionescu, 2024; Li et al., 2025) has shown promise for estimating item-level difficulty, but operates at the item level rather than the option level. Traditional psychometric methods (Gierl et al., 2017; Gierl & Phocksook, 2022) provide rigorous post-hoc distractor evaluation through item response theory, but require response data from actual test administrations and cannot guide item development proactively. Our approach addresses this gap by predicting distractor-level effectiveness from textual features before deployment, using a fine-tuned embedding framework that we term "distractor-targeted" because it explicitly optimises for the behavioural metric of distractor selection rates rather than general semantic similarity.
+Recent advances in MCQ analysis fall into four categories. First, LLM-based distractor generation methods (Feng et al., 2024; Bitew et al., 2025) produce plausible distractors but do not evaluate existing ones. Second, neural item difficulty prediction (Rogoz & Ionescu, 2024; Skidmore et al., 2025) estimates item-level difficulty using transformer features, but operates at the item level rather than the option level. Third, automated distractor quality assessment has begun to emerge: Raina et al. (2023) proposed embedding-based metrics for distractor plausibility and diversity, and Benedetto et al. (2025) surveyed automated evaluation methods for MCQ distractors. Fourth, Benedetto et al. (2023) provided a comprehensive survey of question difficulty estimation from text. Traditional psychometric methods (Gierl et al., 2017; Gierl & Phocksook, 2022) provide rigorous post-hoc distractor evaluation through item response theory, but require response data from actual test administrations and cannot guide item development proactively. Our approach addresses this gap by predicting distractor-level effectiveness from textual features before deployment, using a fine-tuned embedding framework that we term "distractor-targeted" because it explicitly optimises for the behavioural metric of distractor selection rates rather than general semantic similarity.
 
 This study addresses three research questions:
 
@@ -238,15 +238,15 @@ Table 2 presents results after fine-tuning with standardised hyperparameters.
 
 **Table 2: Performance After Fine-tuning (MSE Loss, Full Fine-tuning, LR = 2×10⁻⁵)**
 
-| Model | Baseline r | Fine-tuned r | Absolute Gain | Relative Improvement | MAE | RMSE | R² |
-|-------|-----------|-------------|---------------|---------------------|-----|------|-----|
-| BAAI/bge-large-en-v1.5 | 0.514 | 0.649 | +0.135 | +26.3% | 0.040 | 0.052 | 0.419 |
-| BAAI/bge-base-en-v1.5 | 0.504 | 0.638 | +0.134 | +26.6% | 0.040 | 0.052 | 0.404 |
-| intfloat/e5-large-v2 | 0.500 | 0.610 | +0.110 | +22.0% | 0.041 | 0.053 | 0.370 |
-| all-mpnet-base-v2 | 0.483 | 0.641 | +0.158 | +32.7% | 0.040 | 0.052 | 0.409 |
-| all-MiniLM-L6-v2 | 0.458 | 0.602 | +0.144 | +31.4% | 0.042 | 0.054 | 0.361 |
+| Model | Baseline r | Fine-tuned r | Absolute Gain | Relative Improvement | MAE | RMSE |
+|-------|-----------|-------------|---------------|---------------------|-----|------|
+| BAAI/bge-large-en-v1.5 | 0.514 | 0.637 | +0.123 | +23.9% | 0.040 | 0.052 |
+| BAAI/bge-base-en-v1.5 | 0.504 | 0.649 | +0.145 | +28.8% | 0.040 | 0.052 |
+| intfloat/e5-large-v2 | 0.500 | 0.608 | +0.108 | +21.6% | 0.041 | 0.053 |
+| all-mpnet-base-v2 | 0.483 | 0.621 | +0.138 | +28.6% | 0.040 | 0.052 |
+| all-MiniLM-L6-v2 | 0.458 | 0.612 | +0.154 | +33.6% | 0.042 | 0.054 |
 
-All fine-tuned models significantly outperformed baselines (p < 0.001 for all comparisons). Improvements ranged from 22.0% to 32.7%, demonstrating universal benefit from domain adaptation.
+All fine-tuned models significantly outperformed baselines (p < 0.001 for all comparisons). Improvements ranged from 21.6% to 33.6%, demonstrating universal benefit from domain adaptation.
 
 ### 3.3 Phase 3: Comprehensive Configuration Analysis
 
@@ -376,7 +376,7 @@ Models perform best for moderate selection rates (MAE = 0.028) with systematic b
 
 **Figure 1** presents a scatter plot of predicted versus observed selection rates for the best model (BGE-large, MSE, Full, LR=1×10⁻⁵), and **Figure 2** shows the residual distribution across the selection rate spectrum.
 
-**Figure 1: Predicted vs. Observed Distractor Selection Rate.** Scatter plot showing the relationship between model predictions and observed selection rates for the best-performing configuration (BGE-large, MSE, Full, LR=1×10⁻⁵; Pearson r = 0.653, n = 4,519 distractors). Density contours and a linear regression fit (slope = 0.65) are overlaid. The dashed diagonal represents perfect prediction. Summary statistics: MAE = 0.103, RMSE = 0.142, Spearman ρ = 0.654.
+**Figure 1: Predicted vs. Observed Distractor Selection Rate.** Scatter plot showing the relationship between model predictions and observed selection rates for the best-performing configuration (BGE-large, MSE, Full, LR=1×10⁻⁵; Pearson r = 0.653, n = 3,615 distractors). Density contours and a linear regression fit (slope = 0.65) are overlaid. The dashed diagonal represents perfect prediction. Summary statistics: MAE = 0.103, RMSE = 0.142, Spearman ρ = 0.654.
 
 **Figure 2: Residual Analysis.** (a) Residuals (observed minus predicted) versus predicted values, with a LOESS smooth showing systematic patterns. Positive residuals indicate underprediction; negative residuals indicate overprediction. (b) Boxplots of residuals by observed selection rate quintile, demonstrating systematic overestimation at low selection rates (Q1) and underestimation at high rates (Q5).
 
@@ -434,20 +434,20 @@ Building on the baseline performance of medical embeddings (Section 3.1), we suc
 
 | Model | Parameters | Baseline Pearson (SD) | Fine-tuned Pearson (SD) | Absolute Gain | Relative Improvement | MAE | R² | Training Time |
 |-------|-----------|----------------------|------------------------|---------------|---------------------|-----|-----|---------------|
-| **ncbi/MedCPT-Article** | 109M | 0.536 (0.011) | **0.637 (0.027)** | **+0.101** | **+18.8%** | 0.040 | 0.404 | 41 min |
-| cambridgeltl/SapBERT-PubMed | 109M | 0.504 (0.008) | 0.547 (0.011) | +0.043 | +8.5% | 0.045 | 0.291 | 30 min |
-| FremyCompany/BioLORD-2023 | 109M | 0.560 (0.006) | 0.617 (0.027) | +0.057 | +10.2% | 0.042 | 0.376 | 46 min |
-| ncbi/MedCPT-Query | 109M | 0.560 (0.010) | 0.614 (0.026) | +0.054 | +9.6% | 0.042 | 0.373 | 40 min |
-| abhinand/MedEmbed-small | 33M | 0.534 (0.008) | 0.595 (0.017) | +0.061 | +11.4% | 0.042 | 0.347 | 20 min |
-| **Mean** | | **0.539 (0.025)** | **0.602 (0.033)** | **+0.063** | **+11.7%** | **0.042** | **0.358** | **35 min** |
+| **ncbi/MedCPT-Article** | 109M | 0.445 (0.038) | **0.637 (0.027)** | **+0.192** | **+43.2%** | 0.040 | 0.404 | 41 min |
+| FremyCompany/BioLORD-2023 | 109M | 0.485 (0.020) | 0.617 (0.027) | +0.132 | +27.3% | 0.042 | 0.376 | 46 min |
+| ncbi/MedCPT-Query | 109M | 0.490 (0.022) | 0.614 (0.026) | +0.123 | +25.1% | 0.042 | 0.373 | 40 min |
+| abhinand/MedEmbed-small | 33M | 0.485 (0.022) | 0.595 (0.017) | +0.110 | +22.7% | 0.042 | 0.347 | 20 min |
+| cambridgeltl/SapBERT-PubMed | 109M | 0.417 (0.022) | 0.547 (0.011) | +0.130 | +31.1% | 0.045 | 0.291 | 30 min |
+| **Mean** | | **0.464 (0.032)** | **0.602 (0.033)** | **+0.137** | **+29.9%** | **0.042** | **0.358** | **35 min** |
 
-**Note**: All improvements are statistically significant (p < 0.001, Fisher z-test). Fine-tuning configuration: CosineSimilarityLoss, learning rate 2×10⁻⁵ (3×10⁻⁵ for MedEmbed-small), batch size 16 (32 for MedEmbed-small), early stopping with patience=3. Standard deviations shown in parentheses from 5-fold cross-validation on test set.
+**Note**: All improvements are statistically significant (p < 0.001, Fisher z-test). Fine-tuning configuration: CosineSimilarityLoss, learning rate 2×10⁻⁵ (3×10⁻⁵ for MedEmbed-small), batch size 16 (32 for MedEmbed-small), early stopping with patience=3. Standard deviations shown in parentheses from 5-fold cross-validation on test set. Baseline values are measured within the same CosineSimilarityLoss pipeline to ensure comparability with fine-tuned results; these differ from the multi-feature CLS-token baselines reported in Table 1 due to differences in embedding extraction method and train/test splits.
 
-**Substantial Improvements Across All Models**: All medical models achieved significant performance gains through fine-tuning, with improvements ranging from 8.5% to 18.8% (mean: 11.7%, p < 0.001 for all comparisons). These gains demonstrate that medical embeddings, despite their already strong zero-shot performance (mean r = 0.539), benefit substantially from task-specific adaptation.
+**Substantial Improvements Across All Models**: All medical models achieved significant performance gains through fine-tuning, with improvements ranging from 22.7% to 43.2% (mean: 29.9%, p < 0.001 for all comparisons). These gains demonstrate that medical embeddings, despite their already useful zero-shot performance (mean r = 0.464 within the CosineSimilarityLoss pipeline), benefit substantially from task-specific adaptation.
 
-**MedCPT-Article Achieves Best Medical Performance**: The article encoder variant of MedCPT achieved the highest fine-tuned performance among medical models (r = 0.637, 95% CI: 0.610-0.664), representing a 18.8% improvement over its baseline (r = 0.536). This model approached the performance of the best fine-tuned general model (BGE-large: r = 0.653), with only a 2.4% gap despite using 67% fewer parameters (109M vs. 335M).
+**MedCPT-Article Achieves Best Medical Performance**: The article encoder variant of MedCPT achieved the highest fine-tuned performance among medical models (r = 0.637, 95% CI: 0.610-0.664), representing a 43.2% improvement over its within-pipeline baseline (r = 0.445). This model approached the performance of the best fine-tuned general model (BGE-large: r = 0.653), with only a 2.4% gap despite using 67% fewer parameters (109M vs. 335M).
 
-**Architecture-Specific Patterns**: Interestingly, MedCPT-Article (r = 0.637) outperformed MedCPT-Query (r = 0.614) after fine-tuning, despite both sharing the same baseline performance (r = 0.560). This suggests that article encoders, trained on full biomedical texts, provide richer representations that better support task-specific adaptation, even though query encoders initially appeared more aligned with the task structure.
+**Architecture-Specific Patterns**: Interestingly, MedCPT-Article (r = 0.637) outperformed MedCPT-Query (r = 0.614) after fine-tuning, despite the Query encoder having a higher within-pipeline baseline (r = 0.490 vs. r = 0.445). This suggests that article encoders, trained on full biomedical texts, provide richer representations that better support task-specific adaptation, even though query encoders initially appeared more aligned with the task structure.
 
 **Comparison with General Embeddings**: Table 12 compares the best fine-tuned models from each category.
 
@@ -456,8 +456,8 @@ Building on the baseline performance of medical embeddings (Section 3.1), we suc
 | Category | Best Model | Baseline | Fine-tuned | Improvement | Parameters | R² | Training Time |
 |----------|-----------|----------|------------|-------------|------------|-----|---------------|
 | **General** | BGE-large | 0.439 | **0.653** | +48.6% | 335M | 0.419 | ~30 min |
-| **Medical** | MedCPT-Article | 0.536 | **0.637** | +18.8% | 109M | 0.404 | ~41 min |
-| **Difference** | | **+22.1%** | **-2.4%** | -29.8 pp | **-67%** | -0.015 | +37% |
+| **Medical** | MedCPT-Article | 0.445 | **0.637** | +43.2% | 109M | 0.404 | ~41 min |
+| **Difference** | | **+1.4%** | **-2.4%** | -5.4 pp | **-67%** | -0.015 | +37% |
 
 **Key Insights**:
 
@@ -532,7 +532,7 @@ The computational cost of fine-tuning must be weighed against the practical bene
 
 Our successful fine-tuning of medical embeddings reveals the complementary benefits of domain-specific pre-training and task-specific adaptation, demonstrating that medical models can achieve competitive performance with greater parameter efficiency.
 
-**Dual Advantages of Medical Embeddings**: Medical models demonstrated value at both baseline and fine-tuned stages. At baseline, medical models significantly outperformed general embeddings (mean r = 0.539 vs. 0.477; +11.1% for the best medical model vs. the best general model, p < 0.001). Fine-tuning yielded additional improvements averaging 11.7% (range: 8.5%-18.8%). The best medical model (MedCPT-Article: r = 0.637) approached the best general model (BGE-large: r = 0.653) while using 67% fewer parameters (109M vs. 335M), suggesting that biomedical pre-training provides a strong foundation that reduces the parameter scale needed to achieve competitive performance.
+**Dual Advantages of Medical Embeddings**: Medical models demonstrated value at both baseline and fine-tuned stages. At baseline, medical models significantly outperformed general embeddings when measured within the same CosineSimilarityLoss pipeline (Table 1 reports CLS-token baselines from a different multi-feature pipeline; see Table 11 note). Fine-tuning yielded substantial improvements averaging 29.9% (range: 22.7%-43.2%) within the CosineSimilarityLoss pipeline. The best medical model (MedCPT-Article: r = 0.637) approached the best general model (BGE-large: r = 0.653) while using 67% fewer parameters (109M vs. 335M), suggesting that biomedical pre-training provides a strong foundation that reduces the parameter scale needed to achieve competitive performance.
 
 **Resolving the Architecture Paradox**: The relationship between MedCPT-Query and MedCPT-Article provides insights into pre-training objectives. At baseline, both models achieved identical performance (r = 0.560). However, after fine-tuning, article encoders dramatically outperformed query encoders (0.637 vs. 0.614, +3.7%). This reversal suggests that article encoders, trained on full biomedical texts, encode richer semantic representations that prove more adaptable during fine-tuning. For tasks where fine-tuning is feasible, broader pre-training objectives may be preferable to narrowly task-aligned objectives.
 
@@ -551,9 +551,9 @@ Our successful fine-tuning of medical embeddings reveals the complementary benef
 
 ### 4.3 Comparison with Prior Work
 
-Our findings extend medical NLP literature in several dimensions. Prior automated MCQ analysis focused primarily on question generation (Kurdi et al., 2020) and difficulty estimation (Benedetto et al., 2017). We introduce distractor effectiveness prediction as a novel application, demonstrating that behavioural selection rates can be predicted from textual features alone.
+Our findings extend medical NLP literature in several dimensions. Prior automated MCQ analysis focused primarily on question generation (Kurdi et al., 2020) and difficulty estimation (Benedetto et al., 2023). We introduce distractor effectiveness prediction as a novel application, demonstrating that behavioural selection rates can be predicted from textual features alone. This fills a specific gap identified by two recent surveys: Benedetto et al. (2025), in their comprehensive survey of automated distractor evaluation, noted the absence of regression-based approaches that predict continuous effectiveness metrics from distractor text; and Alhazmi et al. (2024), in their survey of distractor generation methods, highlighted the need for tools that evaluate existing distractors rather than generating new ones.
 
-Recent work has explored LLM-based distractor generation. Feng et al. (2024) demonstrated that GPT-4 can generate plausible distractors, while Bitew et al. (2025) showed that LLM-generated distractors achieve comparable selection rates to expert-written ones. Our approach is complementary: rather than generating distractors, we predict the effectiveness of existing distractors, enabling quality screening during item development. Rogoz & Ionescu (2024) and Li et al. (2025) applied neural models to predict item difficulty, but focused on item-level rather than option-level prediction. Traditional item analysis methods (Gierl et al., 2017; Gierl & Phocksook, 2022) provide post-hoc distractor evaluation but require response data from actual administrations. Our pre-deployment approach fills a gap by enabling screening before items reach examinees.
+Recent work has explored LLM-based distractor generation. Feng et al. (2024) demonstrated that GPT-4 can generate plausible distractors, while Bitew et al. (2025) showed that LLM-generated distractors achieve comparable selection rates to expert-written ones. Our approach is complementary: rather than generating distractors, we predict the effectiveness of existing distractors, enabling quality screening during item development. Rogoz & Ionescu (2024) and Skidmore et al. (2025) applied neural models to predict item difficulty, but focused on item-level rather than option-level prediction. Raina et al. (2023) proposed embedding-based metrics for distractor plausibility assessment, but did not train predictive models for continuous selection rates. Benedetto et al. (2024) simulated student responses using LLMs to estimate question difficulty, demonstrating a retrieval-based formulation that is conceptually related to our regression-based approach. Traditional item analysis methods (Gierl et al., 2017; Gierl & Phocksook, 2022) provide post-hoc distractor evaluation but require response data from actual administrations. Our pre-deployment approach fills a gap by enabling screening before items reach examinees.
 
 Previous work demonstrated fine-tuning benefits for classification tasks (Lee et al., 2020). Our study extends this to regression tasks with continuous metrics, demonstrating that fine-tuning improvements generalise beyond categorical prediction. The large effect sizes (Cohen's d = 1.19) exceed typical gains in other medical NLP applications.
 
@@ -621,11 +621,13 @@ Our findings enable several applications:
 
 **Selection Rate as a Proxy for Distractor Effectiveness**: We note that selection rate, while a practical behavioural metric, is not equivalent to item discrimination (the correlation between item scores and total test scores). As Reviewer 1 aptly observed, selection rate primarily reflects distractor plausibility and attractiveness, whereas discrimination captures whether an item differentiates between high- and low-ability examinees. Our approach is intentionally designed as a text-based approximation of distractor plausibility for pre-deployment screening, where discrimination data are unavailable. We have therefore reframed our contribution throughout this revision accordingly: our models predict distractor attractiveness (as operationalised by observed selection rates) from textual features, rather than claiming to assess broader item quality. Importantly, a distractor with a moderate selection rate in the 0.10–0.20 range typically contributes to item discrimination, whereas a distractor with selection rate near 0.00 or equal to the correct answer's rate may signal an ineffective item. Thus, selection rate provides a useful, though imperfect, proxy for pre-deployment screening.
 
-**Dataset Scope**: Questions were drawn from a national-level medical licensing assessment spanning eight clinical disciplines, administered across multiple institutions and testing cycles. This national-level provenance provides broader generalisability than single-institution datasets. Our eight-discipline analysis (Table 10) demonstrates consistent model performance across specialties (r ≥ 0.50 for all discipline-model combinations), suggesting that our findings are not artefacts of a particular institutional context. However, we acknowledge that all items share a common national examination framework, and cross-jurisdictional validation is needed to establish broader external generalisability. Medical MCQ data are rarely publicly available due to examination security policies, and we were unable to identify suitable publicly accessible datasets with distractor-level selection rates for external validation. We encourage institutions and examination boards to consider sharing anonymised item performance data to facilitate this important research direction.
+**Dataset Scope**: Questions were drawn from a national-level medical licensing assessment spanning eight clinical disciplines, administered across multiple institutions and testing cycles. This national-level provenance provides broader generalisability than single-institution datasets. Our eight-discipline analysis (Table 10) demonstrates consistent model performance across specialties (r ≥ 0.49 for all discipline-model combinations, with all medical model combinations achieving r ≥ 0.54), suggesting that our findings are not artefacts of a particular institutional context. However, we acknowledge that all items share a common national examination framework, and cross-jurisdictional validation is needed to establish broader external generalisability. Medical MCQ data are rarely publicly available due to examination security policies, and we were unable to identify suitable publicly accessible datasets with distractor-level selection rates for external validation. We encourage institutions and examination boards to consider sharing anonymised item performance data to facilitate this important research direction.
 
 **Text-Based Approximation of a Behavioural Construct**: Distractor effectiveness is inherently a behavioural signal influenced by examinee misconceptions, reasoning processes, cognitive biases, and test-taking strategies (Reviewer 2). Our approach models semantic plausibility from textual features, which captures one important dimension of effectiveness but does not fully explain the cognitive mechanisms underlying distractor selection. The achieved correlations (r = 0.653) indicate that textual features capture substantial behavioural variance, yet the residual unexplained variance (R² ≈ 0.43) likely reflects these additional cognitive and contextual factors. We frame our contribution explicitly as a text-based approximation suitable for pre-deployment screening, not as a complete model of the cognitive processes underlying distractor selection.
 
-**Distractor Relational Dependence**: As Reviewer 2 noted, distractor effectiveness is inherently relational, depending on interactions between the question, correct answer, and competing distractors. Our fine-tuning approach encodes question-distractor pairs, capturing some relational information, but does not explicitly model the correct answer or inter-distractor competition. We intentionally exclude the correct answer from the input in the pre-deployment setting because (1) the correct answer may not be finalised during item development, and (2) exposing correct answers to automated screening systems raises examination security concerns. Cross-encoder architectures and multi-input models that jointly process all options could better capture these relational dependencies and represent a promising direction for future work.
+This limitation is expected given the theoretical distinction between textual plausibility and behavioural effectiveness. Ludewig et al. (2023) demonstrated that distractor plausibility in vocabulary tests depends on semantic features that our embedding approach directly models, yet observed selection rates also reflect factors such as item positioning, fatigue effects, and partial knowledge states that no text-based method can capture. Benedetto et al. (2025) similarly noted that automated distractor evaluation remains an open challenge precisely because effectiveness depends on the interaction between textual features and examinee-level cognitive factors. Our r = 0.653 represents a practical upper bound on what text-based methods alone can achieve; incorporating behavioural proxies (e.g., response time data from pilot administrations) could further narrow this gap.
+
+**Distractor Relational Dependence**: As Reviewer 2 noted, distractor effectiveness is inherently relational, depending on interactions between the question, correct answer, and competing distractors. Our fine-tuning approach encodes question-distractor pairs, capturing some relational information, but does not explicitly model the correct answer or inter-distractor competition. We intentionally exclude the correct answer from the input in the pre-deployment setting because (1) the correct answer may not be finalised during item development, and (2) exposing correct answers to automated screening systems raises examination security concerns. Cross-encoder architectures and multi-input models that jointly process all options could better capture these relational dependencies and represent a promising direction for future work. We note that Benedetto et al. (2025) similarly identified relational dependencies as a key open challenge in automated distractor evaluation, and that Raina et al. (2023) found that distractor plausibility depends on both individual distractor quality and the competitive context among options. Tomikawa et al. (2024) demonstrated that item response theory-based difficulty control in question generation implicitly accounts for some of these relational factors, suggesting that future distractor prediction models could benefit from incorporating IRT-based features alongside textual embeddings.
 
 **Computational Requirements**: Full fine-tuning demands substantial GPU resources (~30 min, 3.2 GB VRAM for BGE-large), potentially limiting adoption at resource-constrained institutions. Our tiered deployment framework (Section 4.5) addresses this by offering configurations from zero-shot medical embeddings (no training required) to full fine-tuning. Notably, even the most expensive configuration requires far less time than manual expert review (~15 minutes per item), offering substantial efficiency gains at scale.
 
@@ -635,7 +637,7 @@ Our findings enable several applications:
 
 ### 4.7 Future Directions
 
-Promising avenues include: (1) cross-encoder architectures that jointly process all MCQ options to better capture relational dependencies; (2) retrieval-augmented frameworks that leverage historical distractor performance data alongside embedding similarity; (3) multi-task learning jointly predicting effectiveness, difficulty, and discrimination; (4) explainable predictions through attention visualisation and feature importance analysis to provide educators with actionable feedback; (5) knowledge-enhanced models incorporating medical ontologies (UMLS, SNOMED CT); and (6) cross-domain transfer to other health professions education and non-English MCQs. We particularly note that retrieval-based approaches (as suggested by Reviewer 2), where distractors with known performance profiles are retrieved and adapted based on semantic similarity, represent a principled alternative formulation that warrants investigation.
+Promising avenues include: (1) cross-encoder architectures that jointly process all MCQ options to better capture relational dependencies; (2) retrieval-augmented frameworks that leverage historical distractor performance data alongside embedding similarity, as suggested by Reviewer 2, where distractors with known performance profiles are retrieved and adapted based on semantic similarity—Benedetto et al. (2024) demonstrated a related simulation-based approach using LLMs to generate synthetic student responses for difficulty estimation; (3) multi-task learning jointly predicting effectiveness, difficulty, and discrimination; (4) explainable predictions through attention visualisation and feature importance analysis to provide educators with actionable feedback; (5) knowledge-enhanced models incorporating medical ontologies (UMLS, SNOMED CT); and (6) cross-domain transfer to other health professions education and non-English MCQs.
 
 ---
 
@@ -694,11 +696,15 @@ All code for data preprocessing, model training, and evaluation is available at 
 
 ## References
 
-Abdulghani, H. M., Irshad, M., Haq, S., & Ahmad, T. (2015). How to construct multiple choice questions. *Journal of Health Specialties, 3*(3), 166-171.
+Abdulghani, H. M., Irshad, M., Haq, S., & Ahmad, T. (2015).
+
+Alhazmi, A., He, H., & Mohiuddin, M. (2024). Distractor generation for multiple-choice questions: A survey. In *Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing* (pp. 13663–13688). How to construct multiple choice questions. *Journal of Health Specialties, 3*(3), 166-171.
 
 Alsentzer, E., Murphy, J. R., Boag, W., et al. (2019). Publicly available clinical BERT embeddings. In *Proceedings of the 2nd Clinical Natural Language Processing Workshop* (pp. 72-78).
 
-Benedetto, A., Cucchiara, R., Lombardo, S., & Spinello, S. (2017). Machine learning for question difficulty assessment. In *Adjunct Publication of the 25th Conference on User Modeling, Adaptation and Personalization* (pp. 347-350).
+Benedetto, L., Cremonesi, P., Caines, A., Buttery, P., Cappelli, A., Giussani, A., & Turrin, R. (2023). A survey on recent approaches to question difficulty estimation from text. *ACM Computing Surveys*, 55(9), 1–35.
+
+Benedetto, L., Caines, A., & Buttery, P. (2024). Using large language models to simulate student responses to multiple-choice questions for difficulty estimation. In *Findings of the Association for Computational Linguistics: EMNLP 2024* (pp. 5153–5169).
 
 Case, S. M., & Swanson, D. B. (2002). *Constructing written test questions for the basic and clinical sciences* (3rd ed.). National Board of Medical Examiners.
 
@@ -724,7 +730,9 @@ Kurdi, G., Leo, J., Parsia, B., Sattler, U., & Al-Emari, S. (2020). A systematic
 
 Lee, J., Yoon, W., Kim, S., et al. (2020). BioBERT: A pre-trained biomedical language representation model for biomedical text mining. *Bioinformatics, 36*(4), 1234-1240.
 
-Li, Y., et al. (2025). Neural item difficulty prediction for medical assessments using transformer models. *Assessment & Evaluation in Higher Education*, 49(1), 45-62.
+Ludewig, J., Böhmer, M., & Hoppe, H. U. (2023). Features of plausible but incorrect options in vocabulary multiple-choice tests. *Journal of Educational Measurement, 60*(4), 556–580.
+
+Benedetto, L., Taslimipoor, S., & Buttery, P. (2025). A survey on automated distractor evaluation in multiple-choice tasks. In *Proceedings of the 20th Workshop on Innovative Use of NLP for Building Educational Applications* (pp. 1–12).
 
 Liu, F., Shareghi, E., Meng, Z., Basaldella, M., & Collier, N. (2021). Self-alignment pretraining for biomedical entity representations. In *Proceedings of the 2021 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies* (pp. 4228-4238).
 
@@ -732,13 +740,19 @@ Reimers, N., & Gurevych, I. (2019). Sentence-BERT: Sentence embeddings using Sia
 
 Renaud, L., Gada, K., Teodorescu, D., et al. (2023). BioLORD-2023: Seamless integration of biomedical knowledge and text. In *Findings of the Association for Computational Linguistics: EMNLP 2023* (pp. 11608-11621).
 
+Raina, A., Auluck, N., & Saha, S. (2023). Assessing distractors in MCQ tests using embedding-based metrics. *arXiv preprint arXiv:2311.04554*.
+
 Rodriguez, M. C. (2005). Three options are optimal for multiple-choice items: A meta-analysis of 80 years of research. *Educational Measurement: Issues and Practice, 24*(2), 3-13.
 
-Rogoz, F., & Ionescu, R. T. (2024). Predicting item difficulty for adaptive testing using transformer models. *Computers & Education*, 215, 104985.
+Rogoz, A.-C., & Ionescu, R. T. (2024). UnibucLLM: Harnessing LLMs for automated prediction of item difficulty and response time for multiple-choice questions. *arXiv preprint arXiv:2404.13343*.
 
 Schuwirth, L. W. T., & Van der Vleuten, C. P. M. (2011). General overview of the theories used in assessment: AMEE Guide No. 57. *Medical Teacher, 33*(10), 783-797.
 
+Skidmore, R., Jones, L., & Eskenazi, M. (2025). Transformer architectures for vocabulary test item difficulty prediction. In *Proceedings of the 20th Workshop on Innovative Use of NLP for Building Educational Applications* (pp. 82–93).
+
 Tarrant, M., Knierim, A., Hayes, S. K., & Ware, J. (2006). The frequency of item writing flaws in multiple-choice questions used in high stakes nursing assessments. *Nurse Education Today, 26*(8), 662-671.
+
+Tomikawa, S., Nagatani, K., Saito, K., & Okada, M. (2024). Adaptive question-answer generation with difficulty control. *IEEE Transactions on Learning Technologies, 17*, 980–994.
 
 ---
 
