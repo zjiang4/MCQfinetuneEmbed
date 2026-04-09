@@ -1,35 +1,32 @@
 # MCQ Finetune Embed
 
-**Transfer Learning for Pre-deployment Quality Assurance in Medical Education Assessment: Predicting Distractor Effectiveness via Fine-tuned Embeddings**
+**Transfer Learning for Automated Distractor Effectiveness Assessment in Medical Multiple-Choice Questions: Fine-tuning Embedding Models to Predict Distractor Plausibility**
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-## 📋 Overview
+## Overview
 
-This project implements an AI-driven framework for **automated pre-deployment quality assurance** in medical education assessment. By fine-tuning pre-trained embedding models on distractor-targeted tasks, we can predict the effectiveness of distractors (incorrect options) in multiple-choice questions (MCQs) before they are deployed in high-stakes examinations.
+This project implements a framework for automated pre-deployment screening of distractor effectiveness in medical MCQs using fine-tuned embedding models. By training pre-trained text embedding models on a distractor-targeted regression task, we predict the selection rate (proportion of examinees choosing each option) from textual features alone.
 
-### Key Achievement
+### Key Results
 
-- **48.6% improvement** in distractor effectiveness prediction (Pearson r = 0.653 vs baseline r = 0.439, p < 0.001)
-- **Strong cross-disciplinary generalizability** (r ≥ 0.60 across 8 clinical domains)
-- **Parameter-efficient** approach using LoRA/DoRA for scalable deployment
+- **48.6% improvement** over baseline frozen embeddings (best fine-tuned: Pearson r = 0.653 vs. baseline r = 0.439, p < 0.001, Cohen's d = 1.19)
+- **Cross-disciplinary generalizability** across 8 clinical specialties (r = 0.49-0.58 at baseline)
+- **Medical domain-specific embeddings** achieve strong zero-shot performance (BioLORD-2023 and MedCPT-Query: r = 0.560, +11.1% vs. best general baseline)
+- **Full fine-tuning** dramatically outperforms frozen encoder approaches (+93.8% for BGE-large)
+- **Loss function robustness**: all loss functions achieve strong performance (r = 0.629-0.653)
 
-## 🎯 Problem Statement
+## Problem Statement
 
-Medical education assessments play a critical role in ensuring patient safety. Poorly constructed distractors in MCQs may allow examinees with knowledge gaps to pass assessments, potentially compromising clinical decision-making. Traditional quality assurance methods are:
+Medical MCQ distractors must balance plausibility (attracting partially knowledgeable examinees) with discriminability (not confusing well-prepared examinees). Traditional quality assurance requires post-hoc response data analysis, which is resource-intensive and cannot guide item development proactively. This framework enables pre-deployment text-based screening of distractor effectiveness.
 
-- **Reactive**: Analyze response data after exams are delivered
-- **Resource-intensive**: Require substantial time and effort
-- **Limited**: Provide minimal guidance for future item development
+## Dataset
 
-This framework enables **proactive** quality screening during item development, before exams are deployed.
-
-## 📊 Dataset
-
-- **6,000 medical MCQs** from 8 clinical disciplines
-- **~16,800 distractor samples** with observed selection rates
-- Disciplines: Cardiology, Endocrinology, Haematology, Infectious Diseases, Nephrology, Neurology, Respiratory, Rheumatology
+- **6,000 medical MCQs** from a national-level medical licensing assessment
+- **16,800 distractor samples** with observed selection rates from prior test administrations
+- **8 clinical disciplines**: Cardiology, Endocrinology, Haematology, Infectious Diseases, Nephrology, Neurology, Respiratory Medicine, and Rheumatology
+- **Data split**: 4,200 train / 896 validation / 904 test (70/15/15 stratified by discipline)
 
 ### Data Format
 
@@ -51,7 +48,7 @@ This framework enables **proactive** quality screening during item development, 
 
 See [DATA_DICTIONARY.md](DATA_DICTIONARY.md) for complete dataset documentation.
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Installation
 
@@ -61,111 +58,179 @@ cd MCQfinetuneEmbed
 pip install -r requirements.txt
 ```
 
-### Usage
+### Pipeline
 
 #### 1. Data Preprocessing
 
 ```bash
-python 01_preprocess_new_data.py
+python scripts/01_preprocess_new_data.py
 ```
 
-#### 2. Baseline Experiments
+#### 2. Baseline Evaluation (General-Purpose Models)
 
 ```bash
-python 02_baseline_experiments.py
+python scripts/04_multi_model_baselines.py
 ```
 
-#### 3. Fine-tuning Experiments
+#### 3. Extended Baseline (Medical Domain-Specific Models)
 
 ```bash
-python 05_finetune_all_models.py
+python scripts/15_extended_baseline.py
 ```
 
-## 📁 Project Structure
+#### 4. Comprehensive Fine-tuning (BGE-large, MPNet)
+
+```bash
+python scripts/13_comprehensive_v2.py
+```
+
+#### 5. Fine-tune General Models (Contrastive Learning)
+
+```bash
+python scripts/05_finetune_all_models.py
+```
+
+#### 6. Fine-tune Medical Domain-Specific Models
+
+```bash
+python scripts/medical_finetune_fixed.py
+```
+
+#### 7. Statistical Analysis
+
+```bash
+python scripts/06_statistical_tests.py
+python scripts/compute_revision_analyses.py
+```
+
+#### 8. Discipline-Specific Analysis
+
+```bash
+python scripts/17_discipline_analysis.py
+```
+
+#### 9. Ensemble Analysis
+
+```bash
+python scripts/18_ensemble_analysis.py
+```
+
+#### 10. Generate Figures
+
+```bash
+python scripts/generate_figures.py
+python scripts/generate_medical_embedding_figures.py
+```
+
+## Project Structure
 
 ```
 MCQfinetuneEmbed/
-├── 01_preprocess_new_data.py      # Data preprocessing and cleaning
-├── 02_baseline_experiments.py      # Baseline model evaluation
-├── 03_full_experiment.py           # Full experimental pipeline
-├── 04_multi_model_baselines.py     # Multi-model baseline comparison
-├── 05_finetune_all_models.py       # Fine-tuning all models
-├── DATA_DICTIONARY.md              # Dataset documentation
-├── README.md                       # This file
-└── results/                        # Experimental results
-    ├── baselines/                  # Baseline experiment outputs
-    └── finetuned/                  # Fine-tuned model outputs
+├── scripts/
+│   ├── 01_preprocess_new_data.py          # Data preprocessing
+│   ├── 04_multi_model_baselines.py        # General model baseline evaluation
+│   ├── 05_finetune_all_models.py          # Fine-tune general models (contrastive)
+│   ├── 06_statistical_tests.py            # Statistical significance tests
+│   ├── 13_comprehensive_v2.py             # Comprehensive fine-tuning (MSE/MAE/Huber/Combined)
+│   ├── 14_new_models_baseline.py          # Medical model baseline evaluation
+│   ├── 15_extended_baseline.py            # Combined general + medical baselines
+│   ├── 16_finetune_new_embeddings.py      # Fine-tune medical models (LoRA)
+│   ├── 17_discipline_analysis.py          # Per-discipline performance analysis
+│   ├── 18_ensemble_analysis.py            # Ensemble performance estimation
+│   ├── medical_finetune_fixed.py          # Medical model fine-tuning (CosineSimilarityLoss)
+│   ├── compute_revision_analyses.py       # Analytical revision statistics
+│   ├── generate_figures.py                # Manuscript figure generation
+│   └── generate_medical_embedding_figures.py  # Medical embedding figures
+├── data/
+│   └── processed/                         # Train/val/test splits (not included)
+├── outputs/
+│   └── results/                           # Experimental results
+│       ├── comprehensive_v2/              # Table 2-7 data (48 configurations)
+│       ├── baseline_all/                  # Table 1 baseline data
+│       ├── extended_baseline/             # Medical model baselines
+│       ├── medical_fixed/                 # Medical model fine-tuning results
+│       ├── finetuned/                     # General model fine-tuning results
+│       └── loco/                          # Leave-one-condition-out results
+├── paper/
+│   ├── npj_digital_medicine_v3_with_medical_embeddings.md  # Revised manuscript
+│   ├── RESPONSE_TO_REVIEWERS.md           # Point-by-point response to reviewers
+│   ├── SUPPLEMENTARY_MATERIALS.md         # Supplementary materials
+│   └── REVISION_PLAN.md                   # Data consistency audit
+├── figures/                               # Generated figures
+├── DATA_DICTIONARY.md                     # Dataset documentation
+├── requirements.txt                       # Python dependencies
+└── README.md                              # This file
 ```
 
-## 🔬 Models Evaluated
+## Models Evaluated
 
-### General-Purpose Models
-- BGE (BAAI General Embedding)
-- GTE (General Text Embeddings)
-- E5 (Embeddings from Bidirectional Encoder Representations)
-- Instructor
-- AnglE
+### General-Purpose Models (5)
 
-### Medical Domain-Specific Models
-- BioBERT
-- ClinicalBERT
-- PubMedBERT
-- MedCPT
-- BioLinkBERT
+| Model | Parameters | Hidden Dim | Source |
+|-------|-----------|------------|--------|
+| BAAI/bge-large-en-v1.5 | 335M | 1024 | [HuggingFace](https://huggingface.co/BAAI/bge-large-en-v1.5) |
+| BAAI/bge-base-en-v1.5 | 109M | 768 | [HuggingFace](https://huggingface.co/BAAI/bge-base-en-v1.5) |
+| intfloat/e5-large-v2 | 335M | 1024 | [HuggingFace](https://huggingface.co/intfloat/e5-large-v2) |
+| all-mpnet-base-v2 | 109M | 768 | [HuggingFace](https://huggingface.co/sentence-transformers/all-mpnet-base-v2) |
+| all-MiniLM-L6-v2 | 22M | 384 | [HuggingFace](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) |
 
-## 🛠️ Technical Approach
+### Medical Domain-Specific Models (5)
+
+| Model | Parameters | Hidden Dim | Pre-training |
+|-------|-----------|------------|-------------|
+| FremyCompany/BioLORD-2023 | 109M | 768 | PubMed + UMLS |
+| ncbi/MedCPT-Query-Encoder | 109M | 768 | PubMed query-article pairs |
+| ncbi/MedCPT-Article-Encoder | 109M | 768 | PubMed query-article pairs |
+| abhinand/MedEmbed-small-v0.1 | 33M | 384 | Biomedical texts |
+| cambridgeltl/SapBERT-from-PubMedBERT-fulltext | 109M | 768 | PubMed full-text |
+
+## Technical Approach
 
 ### Distractor-Targeted Fine-Tuning
 
-Unlike standard fine-tuning that treats distractors as generic text, our approach:
+The approach encodes question-distractor pairs and optimises for predicting the continuous selection rate metric:
 
-1. **Models functional role**: Captures "plausible but incorrect" semantics
-2. **Semantic relationship learning**: Balances proximity to correct answer with logical distinction
-3. **Parameter-efficient**: Uses LoRA/DoRA for scalable deployment
+- **Input format**: `'Question: {question_text} Option: {distractor_text}'`
+- **Pooling**: CLS token embedding from the final transformer layer
+- **Regression head**: Single linear layer mapping embeddings to scalar selection rates
+- **Objective**: Minimise prediction error between predicted and observed selection rates
 
 ### Training Configurations Evaluated
 
-- **Loss Functions**: MSE, MAE, Huber Loss, Cosine Similarity
-- **Training Strategies**: Full fine-tuning, LoRA, DoRA
-- **Learning Rates**: Grid search optimization
-- **Batch Sizes**: Memory-efficient configurations
+- **Loss Functions**: MSE, MAE, Huber Loss, Combined (MSE + Cosine Similarity)
+- **Training Strategies**: Full fine-tuning (all parameters), Frozen encoder (regression head only)
+- **Learning Rates**: 1x10^-5, 2x10^-5, 5x10^-5 (grid search)
+- **Cross-validation**: 5-fold stratified cross-validation
+- **Early stopping**: Patience = 3 epochs on validation Pearson correlation
 
-## 📚 Research Questions Addressed
+### Key Findings
 
-1. **Effectiveness**: Does distractor-targeted fine-tuning substantially improve quality prediction?
-2. **Optimization**: What training configurations maximize prediction accuracy?
-3. **Generalizability**: How do architectural factors influence cross-discipline performance?
+1. **Full fine-tuning is essential**: +93.8% improvement over frozen encoders for BGE-large
+2. **Optimal learning rates scale inversely with model size**: 335M models need LR=1e-5, 22-109M models need LR=2e-5
+3. **Loss function choice is secondary**: All achieve r = 0.629-0.653
+4. **Medical embeddings offer strong zero-shot performance**: r = 0.560 without any fine-tuning
+5. **Medical models are parameter-efficient**: MedCPT-Article (109M) achieves 97.6% of BGE-large (335M) performance after fine-tuning
 
-## 🔗 Citation
-
-If you use this code or dataset, please cite:
+## Citation
 
 ```bibtex
-@article{mcq_finetune_embed_2026,
-  title={Transfer Learning for Pre-deployment Quality Assurance in Medical Education Assessment: Predicting Distractor Effectiveness via Fine-tuned Embeddings},
-  author={Jiang, Zhengjian and colleagues},
+@article{jiang2026distractor,
+  title={Transfer Learning for Automated Distractor Effectiveness Assessment in Medical Multiple-Choice Questions: Fine-tuning Embedding Models to Predict Distractor Plausibility},
+  author={Jiang, Zhehan and Zheng, Tianpeng and Liu, Jiayi and Feng, Shicong},
   journal={Under Review},
   year={2026}
 }
 ```
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🤝 Contributing
+## Contact
 
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📧 Contact
-
-For questions or collaboration opportunities:
+- Corresponding author: Zhehan Jiang (jiangzhehan@bjmu.edu.cn)
 - GitHub Issues: [https://github.com/zjiang4/MCQfinetuneEmbed/issues](https://github.com/zjiang4/MCQfinetuneEmbed/issues)
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
-This research contributes to the broader goal of integrating AI into medical education assessment infrastructure, ultimately supporting the development of competent healthcare professionals and safeguarding patient safety.
-
----
-
-**Note**: This framework is intended for research purposes and should be used as a decision-support tool by qualified medical educators, not as a replacement for expert judgment in assessment design.
+This work was supported by the National Natural Science Foundation of China (Grant No. 72474004) and Peking University Health Science Center (Grant No. BMU2021YJ010).
