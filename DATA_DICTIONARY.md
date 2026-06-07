@@ -146,7 +146,7 @@ The dataset covers 8 clinical disciplines:
 |--------|-------|
 | Total Questions | 6,000 |
 | Total Options | 28,332 |
-| Total Distractors | ~16,800 |
+| Total Distractors | 23,999 |
 | Questions per Discipline | 750 |
 | Options per Question | 3-5 |
 | Distractors per Question | 2.8 (mean) |

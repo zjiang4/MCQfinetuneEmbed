@@ -7,15 +7,19 @@
 
 ## Overview
 
-This project implements a framework for automated pre-deployment screening of distractor effectiveness in medical MCQs using fine-tuned embedding models. By training pre-trained text embedding models on a distractor-targeted regression task, we predict the selection rate (proportion of examinees choosing each option) from textual features alone.
+This project investigates whether fine-tuned embedding models can predict distractor selection rates from textual features. The study establishes the technical feasibility of text-based distractor effectiveness prediction under a unified evaluation protocol across 10 embedding models.
 
 ### Key Results
 
-- **48.6% improvement** over baseline frozen embeddings (best fine-tuned: Pearson r = 0.653 vs. baseline r = 0.439, p < 0.001, Cohen's d = 1.19)
-- **Cross-disciplinary generalizability** across 8 clinical specialties (r = 0.49-0.58 at baseline)
-- **Medical domain-specific embeddings** achieve strong zero-shot performance (BioLORD-2023 and MedCPT-Query: r = 0.560, +11.1% vs. best general baseline)
-- **Full fine-tuning** dramatically outperforms frozen encoder approaches (+93.8% for BGE-large)
-- **Loss function robustness**: all loss functions achieve strong performance (r = 0.629-0.653)
+Under a unified 5-fold cross-validation protocol (MSE loss, linear output, batch size 16):
+
+- **Fine-tuning improved prediction** from frozen baselines to r = 0.627–0.644 across 8 of 10 models
+- **Medical models**: SapBERT achieved r = 0.644 (+59.9%), BioLORD r = 0.635 (+62.0%)
+- **General models**: BGE-base achieved r = 0.630 (+48.3%), BGE-large r = 0.626 (+34.0%)
+- **Compact models**: MiniLM (22M) reached r = 0.627, MedEmbed-small (33M) reached r = 0.629
+- **Lexical baselines**: TF-IDF with overlap features achieved r = 0.546; fine-tuned models exceeded this by +18.0%
+- **Full fine-tuning** dramatically outperforms frozen encoder approaches
+- **Cross-disciplinary generalizability** across 8 clinical specialties
 
 ## Problem Statement
 
@@ -24,9 +28,9 @@ Medical MCQ distractors must balance plausibility (attracting partially knowledg
 ## Dataset
 
 - **6,000 medical MCQs** from a national-level medical licensing assessment
-- **16,800 distractor samples** with observed selection rates from prior test administrations
+- **23,999 distractor samples** with observed selection rates from prior test administrations
 - **8 clinical disciplines**: Cardiology, Endocrinology, Haematology, Infectious Diseases, Nephrology, Neurology, Respiratory Medicine, and Rheumatology
-- **Data split**: 4,200 train / 896 validation / 904 test (70/15/15 stratified by discipline)
+- **Evaluation**: 5-fold cross-validation, stratified by discipline
 
 ### Data Format
 
@@ -195,21 +199,22 @@ The approach encodes question-distractor pairs and optimises for predicting the 
 - **Regression head**: Single linear layer mapping embeddings to scalar selection rates
 - **Objective**: Minimise prediction error between predicted and observed selection rates
 
-### Training Configurations Evaluated
+### Training Configurations (Unified Protocol)
 
-- **Loss Functions**: MSE, MAE, Huber Loss, Combined (MSE + Cosine Similarity)
-- **Training Strategies**: Full fine-tuning (all parameters), Frozen encoder (regression head only)
-- **Learning Rates**: 1x10^-5, 2x10^-5, 5x10^-5 (grid search)
-- **Cross-validation**: 5-fold stratified cross-validation
+All models were evaluated under a single unified configuration:
+- **Loss function**: MSE
+- **Output activation**: Linear (no sigmoid)
+- **Batch size**: 16
+- **Evaluation**: 5-fold CV on full dataset (N = 23,999), same splits
 - **Early stopping**: Patience = 3 epochs on validation Pearson correlation
 
 ### Key Findings
 
-1. **Full fine-tuning is essential**: +93.8% improvement over frozen encoders for BGE-large
-2. **Optimal learning rates scale inversely with model size**: 335M models need LR=1e-5, 22-109M models need LR=2e-5
-3. **Loss function choice is secondary**: All achieve r = 0.629-0.653
-4. **Medical embeddings offer strong zero-shot performance**: r = 0.560 without any fine-tuning
-5. **Medical models are parameter-efficient**: MedCPT-Article (109M) achieves 97.6% of BGE-large (335M) performance after fine-tuning
+1. **Full fine-tuning is essential**: dramatically outperforms frozen encoders
+2. **Model convergence**: 6 models converge to r = 0.627–0.644 despite parameter range of 22M–335M
+3. **Compact models are competitive**: MiniLM (22M) matches BGE-large (335M)
+4. **Medical domain pre-training helps**: Medical models show larger relative improvements from fine-tuning
+5. **Lexical features are strong but incomplete**: TF-IDF achieves r = 0.546; contextual models add +18.0%
 
 ## Citation
 
