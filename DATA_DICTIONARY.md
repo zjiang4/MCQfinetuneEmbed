@@ -97,7 +97,7 @@ This dataset contains 6,000 medical multiple-choice questions (MCQs) with observ
 |-------|------|-------------|--------------|
 | `text` | string | Option text | Any valid text |
 | `is_correct` | boolean | Correct answer flag | true/false |
-| `selection_rate` | float | Proportion of examinees selecting this option | 0.0 - 1.0 |
+ | `selection_rate` | float | Proportion of examinees selecting this option | 0.00 - 0.36 |
 | `has_valid_text` | boolean | Text validity flag | true/false |
 
 ---
@@ -121,20 +121,12 @@ The dataset covers 8 clinical disciplines:
 
 ## Data Splits
 
-### Training Set
-- **File**: `train.json`
-- **Size**: 4,200 questions (70%)
-- **Purpose**: Model training and parameter optimization
+The study uses **5-fold cross-validation** stratified by clinical discipline, ensuring balanced representation of all 8 specialties across folds.
 
-### Validation Set
-- **File**: `val.json`
-- **Size**: 896 questions (15%)
-- **Purpose**: Hyperparameter tuning and early stopping
-
-### Test Set
-- **File**: `test.json`
-- **Size**: 904 questions (15%)
-- **Purpose**: Final model evaluation
+- **Total samples**: 23,999 distractors from 6,000 MCQs
+- **Split strategy**: Stratified 5-fold by discipline (~4,800 samples per fold)
+- **Usage**: 4 folds for training, 1 fold for evaluation (rotated)
+- **No separate held-out test set**: All evaluation is via cross-validation
 
 ---
 
@@ -217,10 +209,11 @@ The dataset covers 8 clinical disciplines:
 **Input Features**:
 - Question text
 - Distractor text
-- Correct answer text
+
+> **Note**: The correct answer is intentionally excluded from input. Pre-deployment screening should not require access to the correct answer. The input format is: `"Question: {question_text} Option: {distractor_text}"`
 
 **Target Variable**:
-- Distractor selection rate (continuous, 0-1)
+- Distractor selection rate (continuous, 0.00–0.36)
 
 **Preprocessing**:
 ```python
@@ -228,7 +221,6 @@ The dataset covers 8 clinical disciplines:
 features = {
     'question': sample['question'],
     'distractor': option['text'],
-    'correct_answer': correct_option['text'],
     'target': option['selection_rate']
 }
 ```

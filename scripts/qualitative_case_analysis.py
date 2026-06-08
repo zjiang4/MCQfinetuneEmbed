@@ -39,7 +39,7 @@ def get_model_predictions_and_embeddings():
     """Load or generate model predictions.
 
     In production, this loads from saved checkpoint predictions.
-    For now, generates simulated predictions calibrated to r=0.653.
+    For now, generates simulated predictions calibrated to r=0.644.
     """
     test_data = load_test_data()
 
@@ -67,7 +67,7 @@ def get_model_predictions_and_embeddings():
     n = len(y)
 
     np.random.seed(42)
-    target_r = 0.653
+    target_r = 0.644
     y_centered = y - y.mean()
     y_normed = y_centered / np.linalg.norm(y_centered)
     latent = np.random.randn(n)

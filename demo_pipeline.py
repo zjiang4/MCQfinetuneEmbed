@@ -582,10 +582,6 @@ def print_results(
         f"In the full study, fine-tuned SapBERT achieves r = 0.644, BGE-base r = 0.630"
     )
     print("-" * 70)
-    print(
-        f"In the full study, fine-tuned SapBERT achieves r = 0.644, BGE-base r = 0.630"
-    )
-    print("-" * 70)
 
 
 # ============================================================================
